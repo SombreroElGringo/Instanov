@@ -28,4 +28,15 @@ services:
         image: mysql
         restart: always
         environment:
-            MYSQL_ROOT_PASSWORD: MrxW19x^dLyj0f7&hH2B
+            - MYSQL_ROOT_PASSWORD=root
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: phpmyadmin
+        environment:
+            - PMA_ARBITRARY=1
+            - PMA_USER=root
+            - PMA_PASSWORD=root
+        restart: always
+        ports:
+            - 8083:80
