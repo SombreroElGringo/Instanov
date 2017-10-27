@@ -27,3 +27,5 @@ Installer [docker-compose](https://docs.docker.com/compose/install/)
 Le client sera disponible à [cette adresse](http://localhost:8082)
 
 Le serveur sera disponible à [cette adresse](http://localhost:8081)
+
+Adminer sera disponible à [cette adresse](http://localhost:8083)
