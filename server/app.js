@@ -9,7 +9,7 @@ const path = require('path');
 /**
  *  Load environment variables from .env file, where API keys and passwords are configured.
  */
-dotenv.load({path: './server/.env.server'});
+dotenv.load({path: './.env.server'});
 
 /**
  *  Create Express Server

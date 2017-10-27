@@ -4,13 +4,13 @@
   "description": "A project web application, who look like Instagram!",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./server/app.js"
+    "start": "nodemon ./app.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SombreroElGringo/Instanov.git"
   },
-  "main": "./server/app.js",
+  "main": "./app.js",
   "dependencies": {
     "body-parser": "^1.18.2",
     "chalk": "^2.3.0",
@@ -26,7 +26,9 @@
     "sequelize-typescript": "^0.5.0",
     "sqlite3": "^3.1.13"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "latest"
+  },
   "author": "",
   "license": "ISC",
   "bugs": {
