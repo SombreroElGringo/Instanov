@@ -1,4 +1,7 @@
 # Instanov
+
+[![Build Status](https://travis-ci.org/SombreroElGringo/Instanov.svg?branch=develop)](https://travis-ci.org/SombreroElGringo/Instanov)
+
 A project web application, who look like Instagram!
 
 # Client
