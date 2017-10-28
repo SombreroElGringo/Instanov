@@ -60,3 +60,7 @@ typings/
 # Visual Code and PHPStorm
 .idea
 .vscode
+
+# Sqlite
+*.sqlite
+*.sqlite-journal

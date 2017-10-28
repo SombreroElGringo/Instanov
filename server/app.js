@@ -5,6 +5,7 @@ const express = require('express');
 const chalk = require('chalk');
 const dotenv = require('dotenv');
 const path = require('path');
+const db = require('./config/database');
 
 /**
  *  Load environment variables from .env file, where API keys and passwords are configured.
@@ -15,12 +16,6 @@ dotenv.load({path: './.env.server'});
  *  Create Express Server
  */
 const app = express();
-
-/**
- * Connect to DB.
- */
-//...
-
 
 /**
  * Express configuration.
@@ -61,11 +56,19 @@ app.use((err, req, res, next) => {
 });
 
 /**
- * Start Express server.
+ * Connect to the Database & start Express server.
  */
-app.listen(app.get('port'), () => {
-  console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env')); 
-  console.log('-- Press CTRL-C to stop --\n');
-});
+db.authenticate()
+  .then(() => {
+    console.log('%s Connection has been established successfully with the database', chalk.green('✓'));
+    app.listen(app.get('port'), () => {
+        console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
+        console.log('-- Press CTRL-C to stop --\n');
+    });
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
+  });
+
 
 module.exports = app;
