@@ -5,7 +5,7 @@ const express = require('express');
 const chalk = require('chalk');
 const dotenv = require('dotenv');
 const path = require('path');
-const db = require('./config/database');
+const mongoose = require('mongoose');
 
 /**
  *  Load environment variables from .env file, where API keys and passwords are configured.
@@ -58,17 +58,20 @@ app.use((err, req, res, next) => {
 /**
  * Connect to the Database & start Express server.
  */
-db.authenticate()
-  .then(() => {
-    console.log('%s Connection has been established successfully with the database', chalk.green('✓'));
-    app.listen(app.get('port'), () => {
-        console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
-        console.log('-- Press CTRL-C to stop --\n');
-    });
-  })
-  .catch(err => {
+const options = require('./config/mongoose');
+
+mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://'+(process.env.MONGO_HOST || 'localhost/db_Instanov'), options)
+        .then(() => {
+            console.log('%s Connection has been established successfully with the database', chalk.green('✓'));
+            app.listen(app.get('port'), () => {
+                console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
+                console.log('-- Press CTRL-C to stop --\n');
+        });
+})    
+.catch(err => {
     console.error('Unable to connect to the database:', err);
-  });
+});
 
 
 module.exports = app;
