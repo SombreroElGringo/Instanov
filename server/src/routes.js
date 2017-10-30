@@ -12,11 +12,11 @@ const homeController = require('./controllers/index');
 const apiController = require('./controllers/api');
 
 
-module.exports = function(app) {
+module.exports = function(app, passport) {
    /**
     * Primary app routes.
     */
-   app.get('/', homeController.index);
+   app.get('/', passport.isAuthenticated, homeController.index);
 
    /**
     * API routes.
