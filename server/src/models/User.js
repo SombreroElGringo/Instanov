@@ -7,9 +7,15 @@ const userSchema = new  mongoose.Schema({
 
     email: { type: String, unique: true, required: true },
     password: String,
-    avatar: String,
-    username: String,
-    bibliography: String,
+    passwordResetToken: String,
+    passwordResetExpires: Date,
+
+    profile: {
+        name: String,
+        username: String,
+        picture: String,
+        bibliography: String,
+    }
 }, { timestamps: true });
 
 /**
