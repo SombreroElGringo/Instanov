@@ -12,12 +12,15 @@ const methodOverride = require('method-override');
 const path = require('path');
 const logger = require('morgan');
 const lusca = require('lusca');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
 module.exports = function(app, passport) {
 
    app.set('port', process.env.PORT || 3000);
    app.set('json spaces', 2);
    app.use(expressStatusMonitor());
+   app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, false, null, null, null, null, 'API Instanov'));
    app.use(logger('dev'));
    app.use(bodyParser.json());
    app.use(bodyParser.urlencoded({ extended: true }));
