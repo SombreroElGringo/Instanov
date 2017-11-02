@@ -5,7 +5,7 @@ const User = require('../models/User');
  */
 exports.getApi = (req, res, next) => {
    
-  User.findAll()
+  User.find()
       .then(users => {
         res.json(users);
       })
