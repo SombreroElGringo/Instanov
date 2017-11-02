@@ -27,4 +27,6 @@ Install [docker](https://www.docker.com/)
 
 The client will run on [http://localhost:8082](http://localhost:8082)
 
-The server will run on [http://localhost:8082](http://localhost:8081)
+Le serveur sera disponible à [cette adresse](http://localhost:8081)
+
+Adminer sera disponible à [cette adresse](http://localhost:8083)
