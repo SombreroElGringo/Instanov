@@ -9,7 +9,7 @@ const auth = require('./helpers/apiAuth');
  * Controllers (route handlers).
  */
 const apiController = require('./controllers/api');
-const userController = require('./controllers/user');
+const authController = require('./controllers/auth');
 const indexController = require('./controllers/index');
 
 
@@ -20,21 +20,21 @@ module.exports = function(app, passport) {
    app.get('/', indexController.index);
 
    /**
-    * User routes
+    * Auth routes
     */
-    app.get('/login', userController.getLogin);
-    app.post('/login', userController.postLogin);
-    app.get('/logout', userController.logout);
-    app.get('/forgot', userController.getForgot);
-    app.post('/forgot', userController.postForgot);
-    app.get('/reset/:token', userController.getReset);
-    app.post('/reset/:token', userController.postReset);
-    app.get('/signup', userController.getSignup);
-    app.post('/signup', userController.postSignup);
-    app.get('/account', passport.isAuthenticated, userController.getAccount);
-    app.post('/account/profile', passport.isAuthenticated, userController.postUpdateProfile);
-    app.post('/account/password', passport.isAuthenticated, userController.postUpdatePassword);
-    app.post('/account/delete', passport.isAuthenticated, userController.postDeleteAccount);
+    app.get('/login', authController.getLogin);
+    app.post('/login', authController.postLogin);
+    app.get('/logout', authController.logout);
+    app.get('/forgot', authController.getForgot);
+    app.post('/forgot', authController.postForgot);
+    app.get('/reset/:token', authController.getReset);
+    app.post('/reset/:token', authController.postReset);
+    app.get('/signup', authController.getSignup);
+    app.post('/signup', authController.postSignup);
+    app.get('/account', passport.isAuthenticated, authController.getAccount);
+    app.post('/account/profile', passport.isAuthenticated, authController.postUpdateProfile);
+    app.post('/account/password', passport.isAuthenticated, authController.postUpdatePassword);
+    app.post('/account/delete', passport.isAuthenticated, authController.postDeleteAccount);
 
    /**
     * API routes.
