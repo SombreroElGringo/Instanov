@@ -5,9 +5,7 @@ const crypto = require('crypto');
 const path = require('path');
 const auth = require('./helpers/apiAuth');
 const multer = require('multer');
-multer({ dest: 'uploads/' });
 
-//const upload = multer({ dest: path.join(__dirname, 'uploads') });
 const upload = multer({ storage: getStorage() });
 
 /**
@@ -48,6 +46,7 @@ module.exports = function(app, passport) {
 
     app.get('/story', storyController.index);
     app.post('/story', upload.single('story'), storyController.createStory);
+   // app.get('/story/embed/:filename', storyController.getStoryEmbedByName);
 
     /**
      * API routes.

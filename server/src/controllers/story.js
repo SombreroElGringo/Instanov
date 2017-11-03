@@ -6,7 +6,7 @@ const path = require('path');
  * Form to add a story
  */
 exports.index = (req, res, next) => {
-    upload.single('myFile');
+    
 	res.json({ 
 		title: 'Add a new Story!'
 	});
@@ -17,7 +17,7 @@ exports.index = (req, res, next) => {
  * Add the story in the database
  */
 exports.createStory = (req, res, next) => { 
-    console.log(req.file.filename); // TODO: Implemente the file save
+
     req.assert('username', 'Username cannot be empty').notEmpty();
     const errors = req.validationErrors();
     
@@ -26,16 +26,24 @@ exports.createStory = (req, res, next) => {
         return res.redirect('/story');
     }
     
-    let str = req.body.hashtag;
-    let hashtag = str.match(/#\S+/g); 
-
+    let str = req.body.hashtag ? req.body.hashtag : '';
+    let hashtag = str.length > 0 ? str.match(/#\S+/g) : null;
+    let path = req.protocol + '://'+ req.get('host') + '/story/embed/' + req.file.filename; 
+    
     let story = new Story({
         username: req.body.username,
         info: {
             description: req.body.description,
             hashtag: hashtag,
+            filename: req.file.filename,
             path: path,
         }
+    });
+
+    story.save((err) => {
+        if (err) { return next(err); }
+        
+        res.redirect('/');
     });
 }
 
@@ -57,4 +65,3 @@ exports.getStoryById = (req, res, next) => {
 		console.error('error:', err);
 	});
 }
-

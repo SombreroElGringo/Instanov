@@ -8,6 +8,7 @@ const storySchema = new  mongoose.Schema({
     info: {
         description: String,
         hashtag: [{type: String}],
+        filename: String,
         path: String,
     },
     likes: [{type: String}] // Array of username

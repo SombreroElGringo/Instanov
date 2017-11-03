@@ -33,6 +33,7 @@ module.exports = require('./config/express')(app, passport);
  */
 module.exports = require('./src/routes')(app, passportConfig);
 
+app.use('/story/embed', express.static(__dirname + '/uploads'));
 /**
  * Error 404
  */
