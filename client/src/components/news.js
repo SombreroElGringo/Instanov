@@ -16,13 +16,22 @@ export default class News extends React.Component {
 				</b>
 			</div>
 			<div className={'d-flex over-hidden'}>
-				<Bubble name={'Vous'} image={'https://unsplash.it/64?random'}/>
-				<Bubble recent name={'Toto'} image={'https://unsplash.it/64?random&1'}/>
-				<Bubble recent name={'Truc'} image={'https://unsplash.it/64?random&2'}/>
-				<Bubble recent  name={'Sexy_potato'} image={'https://unsplash.it/64?random&3'}/>
-				<Bubble name={'Chips_co.'} image={'https://unsplash.it/64?random&4'}/>
-				<Bubble name={'InstaDraw'} image={'https://unsplash.it/64?random&5'}/>
-				<Bubble name={'AbraPowa'} image={'https://unsplash.it/64?random&6'}/>
+				{[
+					{name: 'Vous', image: 'https://unsplash.it/64?random'},
+					{name: 'Toto', image: 'https://unsplash.it/64?random'},
+					{name: 'Truc', image: 'https://unsplash.it/64?random'},
+					{name: 'Sexy_potato', image: 'https://unsplash.it/64?random'},
+					{name: 'Chips_co', image: 'https://unsplash.it/64?random'},
+					{name: 'InstaDraw', image: 'https://unsplash.it/64?random'},
+					{name: 'AbraPowa', image: 'https://unsplash.it/64?random'},
+				].map((value, index) => {
+					return <Bubble name={value.name}
+					               animation={'flipInY'}
+					               delay={index + 1}
+					               image={value.image + '&' + index}
+					               key={index}/>
+				})}
+			
 			</div>
 		</div>
 	}

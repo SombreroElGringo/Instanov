@@ -14,7 +14,7 @@ export default class Post extends Component{
 			likes,
 		} = this.props.post;
 		
-		return <div className={'post'}>
+		return <div className={'post animated fadeIn'}>
 			<div className={'post-header d-flex justify-content-between align-items-center'}>
 				<div className={'d-flex align-items-center'}>
 					<Bubble image={image} mini/>

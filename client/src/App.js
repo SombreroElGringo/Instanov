@@ -10,7 +10,7 @@ class App extends Component {
 		return <Router>
 			<div>
 				<Route exact path={"/"} component={() => <div>
-					<div className="App">
+					<div className="App animated fadeIn ">
 						<Header />
 						<div style={{overflow: 'scroll', height: 'calc(100vh - 46px)'}}>
 							<News/>
@@ -19,7 +19,7 @@ class App extends Component {
 					</div>
 				</div>}/>
 				<Route exact path={"/camera"} component={() => <div>
-					<div>
+					<div className={'animated fadeIn'}>
 						<Camera/>
 					</div>
 				</div>}/>

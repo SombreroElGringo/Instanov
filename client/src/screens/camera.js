@@ -1,5 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
+
 require('tracking/build/tracking-min');
 require('tracking/build/data/face-min');
 require('tracking/build/data/eye-min');
@@ -25,19 +26,12 @@ export default class Camera extends React.Component {
 		tracker.on('track', (event) => {
 			context.clearRect(0, 0, canvas.width, canvas.height);
 			event.data.forEach((rect) => {
-				//context.strokeStyle = '#a64ceb';
-				//context.strokeRect(rect.x, rect.y, rect.width, rect.height);
-				//context.font = '11px Helvetica';
-				//context.fillStyle = "#fff";
-				//context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
-				//context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
 				this.setState({
-					//rect: <img src={"https://m.popkey.co/8618d2/DyVJx.gif"} style={{
 					//rect: <img src={"http://www.freeiconspng.com/uploads/trump-face-png-21.png"} style={{
 					rect: <img src={"http://pngimg.com/uploads/hitler/hitler_PNG10.png"} style={{
 						backgroundImage: 'url("")',
 						position: 'absolute',
-						top: rect.y-20,
+						top: rect.y - 20,
 						right: rect.x,
 						width: rect.width,
 						//height: rect.height
@@ -45,11 +39,6 @@ export default class Camera extends React.Component {
 				})
 			});
 		});
-		
-		//var gui = new dat.GUI();
-		//gui.add(tracker, 'edgesDensity', 0.1, 0.5).step(0.01);
-		//gui.add(tracker, 'initialScale', 1.0, 10.0).step(0.1);
-		//gui.add(tracker, 'stepSize', 1, 5).step(0.1);
 		
 		navigator.mediaDevices.getUserMedia({
 			audio: false,
@@ -59,17 +48,13 @@ export default class Camera extends React.Component {
 		}).then(stream => {
 			this.camera.srcObject = stream;
 		});
-		
-		
 	}
 	
 	render() {
-		
-		
 		return <div className={'camera'}>
 			<div style={{alignItems: 'flex-start', justifyContent: 'flex-start'}}>
 				<Link to="/" className={'camera-close p-1'} style={{color: 'white'}}>
-					<i className={'fa fa-close '}/>
+					<i className={'fa fa-arrow-left '}/>
 				</Link>
 			</div>
 			<div className={'camera-visualizer'} style={{flex: 1, width: window.innerWidth, position: 'relative'}}>
@@ -89,7 +74,41 @@ export default class Camera extends React.Component {
 				}}/>
 				{this.state.rect}
 			</div>
-			<div>
+			<div style={{color: 'whitesmoke', fontSize: '30px', display: 'flex', justifyContent: 'space-between'}}>
+				<div style={{flex: 1, display: 'flex', justifyContent: 'space-around'}}>
+					<i className={'fa fa-image'}/>
+					<i className={'fa fa-flash'}/>
+				</div>
+				<div style={{flex: 1}}>
+					<div style={{
+						position: 'relative',
+						width: '80px',
+						height: '80px',
+						margin: '0 auto',
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}>
+						<div style={{
+							position: 'absolute',
+							backgroundColor: 'rgba(211, 211, 211, 0.49)',
+							width: '100%',
+							height: '100%',
+							borderRadius: '50%',
+						}}/>
+						<div style={{
+							position: 'absolute',
+							backgroundColor: 'white',
+							width: '70%',
+							height: '70%',
+							borderRadius: '50%'
+						}}/>
+					</div>
+				</div>
+				<div style={{flex: 1, display: 'flex', justifyContent: 'space-around'}}>
+					<i className={'fa fa-refresh'}/>
+					<i className={'fa fa-smile-o'}/>
+				</div>
 			</div>
 		</div>
 	}
