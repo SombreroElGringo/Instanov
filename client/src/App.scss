@@ -16,7 +16,7 @@ body {
   justify-content: space-around;
 }
 
-.align-items-center{
+.align-items-center {
   align-items: center;
 }
 
@@ -65,6 +65,27 @@ img {
   background-image: url("https://placehold.it/64x64/aaa/aaa");
 }
 
+.camera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  height: 100vh;
+  font-size: 20px;
+  color: white;
+  background-color: black;
+  &>div{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+  .camera-visualizer {
+    //transform: rotateY(180deg);
+  }
+}
+
 @for $i from 1 through 5 {
   .p-#{$i} {
     padding: #{$i}0px;
@@ -103,25 +124,25 @@ img {
   }
 }
 
-.post{
-  &:not(:last-child){
+.post {
+  &:not(:last-child) {
     border-bottom: 1px solid lightgray;
     padding-bottom: 10px;
     margin-bottom: 10px;
   }
-  .post-featured{
+  .post-featured {
     width: 100%;
-    background-image: url("https://m.popkey.co/8618d2/DyVJx.gif");
-    background-repeat: no-repeat;
+    background: url("https://m.popkey.co/8618d2/DyVJx.gif") no-repeat;
     background-size: cover;
+    min-height: 100vw;
   }
-  .post-actions{
+  .post-actions {
     font-size: 30px;
-    i{
+    i {
       padding: 0 10px;
     }
   }
-  .post-date{
+  .post-date {
     color: gray;
   }
 }

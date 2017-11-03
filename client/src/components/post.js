@@ -43,7 +43,7 @@ export default class Post extends Component{
 				{description}
 			</div>}
 			<div className={'p-1 post-date'}>
-				Le {moment(date).format('LLLL')}
+				{moment(date).from(new Date())}
 			</div>
 		</div>
 	}

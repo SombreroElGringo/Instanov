@@ -1,5 +1,6 @@
 import React from 'react'
 import {Post} from './'
+import moment from 'moment'
 
 export default class Content extends React.Component {
 	render() {
@@ -9,7 +10,7 @@ export default class Content extends React.Component {
 				image: 'https://unsplash.it/32',
 				featured: 'https://unsplash.it/600',
 				description: 'SOME DESCRIPTION GOES HERE',
-				date: new Date(),
+				date: moment(1509623326 * 1000),
 				likes: [
 					'Plop',
 					'Plopy',
@@ -23,7 +24,7 @@ export default class Content extends React.Component {
 				image: 'https://unsplash.it/32?random&1',
 				featured: 'https://unsplash.it/600?random&2',
 				description: 'SOME DESCRIPTION GOES HERE',
-				date: new Date(),
+				date: moment(1509621326 * 1000),
 				likes: [
 					'Plop',
 					'Plopy',
@@ -35,7 +36,7 @@ export default class Content extends React.Component {
 				image: 'https://unsplash.it/32?random&3',
 				featured: 'https://unsplash.it/600?random&4',
 				description: 'SOME DESCRIPTION GOES HERE',
-				date: new Date(),
+				date: moment(1509620326 * 1000),
 				likes: [
 					'Plop',
 					'Plopy',
