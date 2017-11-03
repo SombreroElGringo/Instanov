@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const apiError = require('./apiError');
+const errorManager = require('./errorManager');
 
 /**
  * Middleware check if the token & timestamp is valid
@@ -12,12 +12,12 @@ exports.middleware = (req, res, next) => {
 	let timestamp = req.query.timestamp || req.headers['x-timestamp'];
 	
 	if (!token || !timestamp) {
-		apiError.throwError('token or timestamp is missing!', 400, next);
+		errorManager.throwError('token or timestamp is missing!', 400, next);
 	} else {
 		if (this.tokenIsValid(token, next) & this.timestampIsValid(timestamp, next)) {
 			return next();
 		} else {
-			apiError.throwError('token or timestamp is not valid!', 400, next);
+			errorManager.throwError('token or timestamp is not valid!', 400, next);
 		}
 	}
 }
@@ -31,7 +31,7 @@ exports.tokenIsValid = (token, next) => {
 	let apiToken = crypto.createHmac('sha256', process.env.SECRET_KEY)
 		.update(process.env.HASH_KEY)
 		.digest('hex');
-	return apiToken === token ? true : apiError.throwError('token is not valid!', 400, next);
+	return apiToken === token ? true : errorManager.throwError('token is not valid!', 400, next);
 }
 
 /**
@@ -41,8 +41,8 @@ exports.tokenIsValid = (token, next) => {
 exports.timestampIsValid = (timestamp, next) => {
 	if (!isNaN(timestamp)) {
 		let difference = Math.floor(Date.now() / 1000) - timestamp;
-		return (difference > -10 && difference < 10) ? true : apiError.throwError('timestamp is not valid!', 400, next);
+		return (difference > -10 && difference < 10) ? true : errorManager.throwError('timestamp is not valid!', 400, next);
 	} else {
-		apiError.throwError('timestamp type is not valid!', 400, next)
+		errorManager.throwError('timestamp type is not valid!', 400, next)
 	}
 }

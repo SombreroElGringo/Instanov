@@ -46,7 +46,7 @@ module.exports = function(app, passport) {
 
     app.get('/story', storyController.index);
     app.post('/story', upload.single('story'), storyController.createStory);
-   // app.get('/story/embed/:filename', storyController.getStoryEmbedByName);
+    app.delete('/story/:id', storyController.deleteStoryById);
 
     /**
      * API routes.

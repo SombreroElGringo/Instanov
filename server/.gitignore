@@ -61,6 +61,6 @@ typings/
 .idea
 .vscode
 
-# Sqlite
-*.sqlite
-*.sqlite-journal
+# Upload files
+/uploads/*.png
+/uploads/*.jpg

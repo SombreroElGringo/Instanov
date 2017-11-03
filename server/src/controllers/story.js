@@ -1,5 +1,7 @@
 const Story = require('../models/Story');
+const ObjectId = require('mongodb').ObjectID;
 const path = require('path');
+const fs = require('fs');
 
 /**
  * GET /story
@@ -22,8 +24,11 @@ exports.createStory = (req, res, next) => {
     const errors = req.validationErrors();
     
     if (errors) {
-        req.flash('errors', errors);
-        return res.redirect('/story');
+        res.json({
+            code: 400,
+            status: 'error',
+            message: 'username cannot be empty!'
+        });
     }
     
     let str = req.body.hashtag ? req.body.hashtag : '';
@@ -40,13 +45,17 @@ exports.createStory = (req, res, next) => {
         }
     });
 
-    story.save((err) => {
-        if (err) { return next(err); }
-        
-        res.redirect('/');
+    story.save().then(err => {
+        res.json({
+            code: 201,
+            status: 'success',
+            message: 'Story created!'
+        });
+    })
+    .catch(err => {
+        return next(err);
     });
 }
-
 
 /**
  * GET /story/:id
@@ -54,14 +63,44 @@ exports.createStory = (req, res, next) => {
  */
 exports.getStoryById = (req, res, next) => {
     
-    let id = req.params.id
+    let id = req.params.id;
 
-   	Story.find({_id: id}).then(story => {
+   	Story.findOne({_id: new ObjectId(id)}).then(story => {
 		res.json({ 
 			story
 		});
 	})
 	.catch(err => {
-		console.error('error:', err);
+		return next(err);
+	});
+}
+
+/**
+ * DELETE /story/:id
+ * Delete a story by id from the database
+ */
+exports.deleteStoryById = (req, res, next) => {
+    
+    let id = req.params.id
+    Story.findOne({_id: new ObjectId(id)}).then(story => {
+
+        fs.unlink('./uploads/'+story.info.filename, err => {
+            if (err) { console.error('Error: ', err);}
+            console.log(`Story deleted ${story.info.filename}`);
+        });
+        
+        Story.remove({_id: new ObjectId(id)}).then(err => {
+            res.json({
+                code: 200,
+                status: 'success',
+                message: 'Story deleted!'
+            })
+        })
+        .catch(err => {
+            return next(err);
+        });
+    })
+    .catch(err => {
+		return next(err);
 	});
 }

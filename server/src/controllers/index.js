@@ -9,7 +9,7 @@ exports.index = (req, res, next) => {
 
    	Promise.all([
 		User.find(),
-		Story.find()
+		Story.find().sort('-date')
 	])
 	.then((users, stories) => {
 		res.json({
