@@ -46,6 +46,7 @@ module.exports = function(app, passport) {
 
     app.get('/story', storyController.index);
     app.post('/story', upload.single('story'), storyController.createStory);
+    app.put('/story/:id', storyController.editStoryById);
     app.delete('/story/:id', storyController.deleteStoryById);
 
     /**
