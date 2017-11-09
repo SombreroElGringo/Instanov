@@ -10,7 +10,11 @@ const User = require('../models/User');
  */
 exports.getLogin = (req, res) => {
     if (req.user) {
-        return res.redirect('/');
+        res.json({
+            code: 404,
+            status: 'error',
+            message: 'You are already logged in!',
+        });
     }
     res.json({
         title: 'Login'
@@ -29,20 +33,29 @@ exports.postLogin = (req, res, next) => {
     const errors = req.validationErrors();
   
     if (errors) {
-        req.flash('errors', errors);
-        return res.redirect('/login');
+        res.json({
+            code: 404,
+            status: 'error',
+            message: errors.msg,
+        });
     }
   
     passport.authenticate('local', (err, user, info) => {
         if (err) { return next(err); }
         if (!user) {
-            req.flash('errors', info);
-            return res.redirect('/login');
+            res.json({
+                code: 404,
+                status: 'error',
+                message: info,
+            });
         }
         req.logIn(user, (err) => {
             if (err) { return next(err); }
-            req.flash('success', { msg: 'Success! You are logged in.' });
-            res.redirect(req.session.returnTo || '/');
+            res.json({
+                code: 200,
+                status: 'success',
+                message: 'Success! You are logged in.',
+            });
         });
     })(req, res, next);
 };
@@ -53,7 +66,11 @@ exports.postLogin = (req, res, next) => {
  */
 exports.logout = (req, res) => {
     req.logout();
-    res.redirect('/');
+    res.json({
+        code: 200,
+        status: 'success',
+        message: 'Success! You are logged out!',
+    });
 };
 
 /**
@@ -62,7 +79,11 @@ exports.logout = (req, res) => {
  */
 exports.getSignup = (req, res) => {
     if (req.user) {
-        return res.redirect('/');
+        res.json({
+            code: 404,
+            status: 'error',
+            message: 'You are already logged in!',
+        });
     }
     res.json({
         title: 'Create Account'
@@ -82,8 +103,11 @@ exports.postSignup = (req, res, next) => {
     const errors = req.validationErrors();
   
     if (errors) {
-        req.flash('errors', errors);
-        return res.redirect('/signup');
+        res.json({
+            code: 404,
+            status: 'error',
+            message: errors.msg,
+        });
     }
   
     const user = new User({
@@ -94,8 +118,11 @@ exports.postSignup = (req, res, next) => {
     User.findOne({ email: req.body.email }, (err, existingUser) => {
       if (err) { return next(err); }
       if (existingUser) {
-        req.flash('errors', { msg: 'Account with that email address already exists.' });
-        return res.redirect('/signup');
+        res.json({
+            code: 404,
+            status: 'error',
+            message: 'Account with that email address already exists.',
+        });
       }
       user.save((err) => {
         if (err) { return next(err); }
@@ -103,7 +130,10 @@ exports.postSignup = (req, res, next) => {
             if (err) {
                 return next(err);
             }
-            res.redirect('/');
+            res.json({
+                code: 200,
+                status: 'success',
+            });
         });
       });
     });
@@ -130,8 +160,11 @@ exports.postUpdateProfile = (req, res, next) => {
     const errors = req.validationErrors();
   
     if (errors) {
-        req.flash('errors', errors);
-        return res.redirect('/account');
+        res.json({
+            code: 404,
+            status: 'error',
+            message: errors.msg,
+        });
     }
   
     User.findById(req.user.id, (err, user) => {
@@ -143,14 +176,20 @@ exports.postUpdateProfile = (req, res, next) => {
         user.profile.website = req.body.website || '';
         user.save((err) => {
             if (err) {
-            if (err.code === 11000) {
-                req.flash('errors', { msg: 'The email address you have entered is already associated with an account.' });
-                return res.redirect('/account');
+                if (err.code === 11000) {
+                    res.json({
+                        code: 404,
+                        status: 'error',
+                        message: 'The email address you have entered is already associated with an account.',
+                    });
+                }
+                return next(err);
             }
-            return next(err);
-            }
-            req.flash('success', { msg: 'Profile information has been updated.' });
-            res.redirect('/account');
+            res.json({
+                code: 200,
+                status: 'success',
+                message: 'Profile information has beeb updated!',
+            });
         });
     });
 };
@@ -166,8 +205,11 @@ exports.postUpdatePassword = (req, res, next) => {
     const errors = req.validationErrors();
   
     if (errors) {
-        req.flash('errors', errors);
-        return res.redirect('/account');
+        res.json({
+            code: 404,
+            status: 'error',
+            message: errors.msg,
+        });
     }
   
     User.findById(req.user.id, (err, user) => {
@@ -175,8 +217,11 @@ exports.postUpdatePassword = (req, res, next) => {
         user.password = req.body.password;
         user.save((err) => {
             if (err) { return next(err); }
-            req.flash('success', { msg: 'Password has been changed.' });
-            res.redirect('/account');
+            res.json({
+                code: 200,
+                status: 'success',
+                message: 'Password has been changed!',
+            });
         });
     });
 };
@@ -189,8 +234,11 @@ exports.postDeleteAccount = (req, res, next) => {
     User.remove({ _id: req.user.id }, (err) => {
         if (err) { return next(err); }
         req.logout();
-        req.flash('info', { msg: 'Your account has been deleted.' });
-        res.redirect('/');
+        res.json({
+            code: 200,
+            status: 'success',
+            message: 'Your account has been deleted!',
+        });
     });
 };
 
@@ -200,15 +248,22 @@ exports.postDeleteAccount = (req, res, next) => {
  */
 exports.getReset = (req, res, next) => {
     if (req.isAuthenticated()) {
-        return res.redirect('/');
+        res.json({
+            code: 404,
+            status: 'error',
+            message: 'You are already logged in!',
+        });
     }
     User.findOne({ passwordResetToken: req.params.token })
         .where('passwordResetExpires').gt(Date.now())
         .exec((err, user) => {
             if (err) { return next(err); }
             if (!user) {
-                req.flash('errors', { msg: 'Password reset token is invalid or has expired.' });
-                return res.redirect('/forgot');
+                res.json({
+                    code: 404,
+                    status: 'error',
+                    message: 'Password reset token is invalid or has expired!',
+                });
             }
             res.json({
                 title: 'Password Reset'
@@ -228,8 +283,11 @@ exports.postReset = (req, res, next) => {
     const errors = req.validationErrors();
   
     if (errors) {
-        req.flash('errors', errors);
-        return res.redirect('back');
+        res.json({
+            code: 404,
+            status: 'error',
+            message: errors.msg,
+        });
     }
   
     const resetPassword = () =>
@@ -237,8 +295,11 @@ exports.postReset = (req, res, next) => {
             .where('passwordResetExpires').gt(Date.now())
             .then((user) => {
                 if (!user) {
-                    req.flash('errors', { msg: 'Password reset token is invalid or has expired.' });
-                    return res.redirect('back');
+                    res.json({
+                        code: 404,
+                        status: 'error',
+                        message: 'Password reset token is invalid or has expired!',
+                    });
                 }
                 user.password = req.body.password;
                 user.passwordResetToken = undefined;
@@ -262,12 +323,20 @@ exports.postReset = (req, res, next) => {
             text: `Hello,\n\nThis is a confirmation that the password for your account ${user.email} has just been changed.\n`
         };
         return transporter.sendMail(mailOptions).then(() => {
-            req.flash('success', { msg: 'Success! Your password has been changed.' });
+            return true;
         });
     };
   
     resetPassword().then(sendResetPasswordEmail)
-                   .then(() => { if (!res.finished) res.redirect('/'); })
+                   .then(() => { 
+                       if (!res.finished) {
+                            res.json({
+                                code: 200,
+                                status: 'success',
+                                message: 'Success! Your password has been changed.',
+                            }); 
+                        }
+                    })
                    .catch(err => next(err));
 };
   
@@ -277,7 +346,11 @@ exports.postReset = (req, res, next) => {
  */
 exports.getForgot = (req, res) => {
     if (req.isAuthenticated()) {
-        return res.redirect('/');
+        res.json({
+            code: 404,
+            status: 'error',
+            message: 'You are already logged! If you want change your password edit your Account!',
+        });
     }
     res.json({
         title: 'Forgot Password'
@@ -295,8 +368,11 @@ exports.postForgot = (req, res, next) => {
     const errors = req.validationErrors();
   
     if (errors) {
-        req.flash('errors', errors);
-        return res.redirect('/forgot');
+        res.json({
+            code: 404,
+            status: 'error',
+            message: errors.msg,
+        });
     }
   
     const createRandomToken = crypto.randomBytesAsync(16)
@@ -306,7 +382,11 @@ exports.postForgot = (req, res, next) => {
         User.findOne({ email: req.body.email })
             .then((user) => {
                 if (!user) {
-                    req.flash('errors', { msg: 'Account with that email address does not exist.' });
+                    res.json({
+                        code: 404,
+                        status: 'error',
+                        message: 'Accout with that email address does not exist!',
+                    });
                 } else {
                     user.passwordResetToken = token;
                     user.passwordResetExpires = Date.now() + 3600000; // 1 hour
@@ -329,12 +409,15 @@ exports.postForgot = (req, res, next) => {
             If you did not request this, please ignore this email and your password will remain unchanged.\n`
         };
         return transporter.sendMail(mailOptions).then(() => {
-            req.flash('info', { msg: `An e-mail has been sent to ${user.email} with further instructions.` });
+            res.json({
+                code: 200,
+                status: 'success',
+                message: `An e-mail has been sent to ${user.email} with further instructions.`,
+            });
         });
     };
   
     createRandomToken.then(setRandomToken)
                      .then(sendForgotPasswordEmail)
-                     .then(() => res.redirect('/forgot'))
                      .catch(next);
 };
