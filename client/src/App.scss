@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css?family=Berkshire+Swash');
-
 body {
   overflow: hidden;
 }
@@ -74,6 +73,15 @@ img {
   font-size: 20px;
   color: white;
   background-color: black;
+
+  .thumbnail{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    opacity: 0;
+    transition: all 400ms;
+  }
+
   &>div{
     flex: 1;
     display: flex;

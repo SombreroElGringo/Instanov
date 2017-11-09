@@ -50,8 +50,24 @@ export default class Camera extends React.Component {
 		});
 	}
 	
+	captureImage() {
+		const video = this.camera;
+		const canvas    = document.createElement("canvas");
+		canvas.width  = video.videoWidth;
+		canvas.height = video.videoHeight;
+		canvas.getContext('2d')
+		      .drawImage(video, 0, 0, canvas.width, canvas.height);
+		
+		this.thumbnail.src = canvas.toDataURL();
+		this.thumbnail.style.maxWidth = '100px';
+		this.thumbnail.style.maxHeight = '100px';
+		this.thumbnail.style.opacity = '1';
+		
+	};
+	
 	render() {
 		return <div className={'camera'}>
+			<img className="thumbnail" ref={ref => this.thumbnail = ref} />
 			<div style={{alignItems: 'flex-start', justifyContent: 'flex-start'}}>
 				<Link to="/" className={'camera-close p-1'} style={{color: 'white'}}>
 					<i className={'fa fa-arrow-left '}/>
@@ -79,7 +95,7 @@ export default class Camera extends React.Component {
 					<i className={'fa fa-image'}/>
 					<i className={'fa fa-flash'}/>
 				</div>
-				<div style={{flex: 1}}>
+				<div style={{flex: 1}} onClick={() => this.captureImage()}>
 					<div style={{
 						position: 'relative',
 						width: '80px',
