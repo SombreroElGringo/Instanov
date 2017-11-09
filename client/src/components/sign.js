@@ -6,7 +6,9 @@ export default class Sign extends Component{
     componentDidMount() {
         
             // Get data from API
-            fetch('http://localhost:5000')
+            fetch('http://localhost:5000', {
+                credentials: 'include'  
+            })
               // parse response
               .then((res) => res.json())
               // use parsed response
