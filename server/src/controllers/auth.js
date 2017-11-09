@@ -82,8 +82,11 @@ exports.postSignup = (req, res, next) => {
     const errors = req.validationErrors();
   
     if (errors) {
-        req.flash('errors', errors);
-        return res.redirect('/signup');
+        return res.json({
+            code: 404,
+            status: 'error',
+            message: errors.msg,
+        });
     }
   
     const user = new User({
@@ -94,8 +97,11 @@ exports.postSignup = (req, res, next) => {
     User.findOne({ email: req.body.email }, (err, existingUser) => {
       if (err) { return next(err); }
       if (existingUser) {
-        req.flash('errors', { msg: 'Account with that email address already exists.' });
-        return res.redirect('/signup');
+        return res.json({
+            code: 404,
+            status: 'error',
+            message: 'Account with that email address already exists.',
+        });
       }
       user.save((err) => {
         if (err) { return next(err); }
@@ -103,7 +109,10 @@ exports.postSignup = (req, res, next) => {
             if (err) {
                 return next(err);
             }
-            res.redirect('/');
+            return res.json({
+                code: 200,
+                status: 'success',
+            });
         });
       });
     });
