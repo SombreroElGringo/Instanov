@@ -47,7 +47,8 @@ export default class Camera extends React.Component {
 				facingMode: 'user'
 			}
 		}).then(stream => {
-			this.camera.srcObject = stream;
+			if(this.camera)
+				this.camera.srcObject = stream;
 		});
 	}
 	
