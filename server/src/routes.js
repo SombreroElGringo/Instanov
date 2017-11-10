@@ -21,7 +21,7 @@ module.exports = function(app, passport) {
     /**
      * Primary app routes.
      */
-   app.get('/', indexController.index);
+   app.get('/', passport.isAuthenticated, indexController.index);
 
     /**
      * Auth routes
