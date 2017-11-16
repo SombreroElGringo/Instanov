@@ -174,7 +174,9 @@ img {
           background-size: contain;
           background-position: center;
           //min-height: 100vw;
-          min-height: 600px;
+          @media screen and (min-width: 960px){
+            min-height: 600px;
+          }
         }
         .post-actions {
           font-size: 30px;

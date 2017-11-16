@@ -35,7 +35,7 @@ export default class Post extends Component{
 					<i className={'fa fa-bookmark-o'}/>
 				</div>
 			</div>
-			{likes && <div className={'p-1'}>
+			{likes && likes.length > 0 && <div className={'p-1'}>
 				Aimé par <b>{likes.slice(0, 2).join(', ')}</b>
 				{likes.length > 2 && <span> et <b>{likes.length - 2} autre{likes.length > 3 && 's'} personne{likes.length > 3 && 's'}</b></span>}
 			</div>}

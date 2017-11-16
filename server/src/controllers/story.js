@@ -23,7 +23,7 @@ exports.createStory = (req, res, next) => {
     const errors = req.validationErrors();
     
     if (errors) {
-        res.json({
+        return res.json({
             code: 400,
             status: 'error',
             message: 'username cannot be empty!'

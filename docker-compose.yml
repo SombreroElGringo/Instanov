@@ -1,9 +1,5 @@
 version: "3"
 services:
-    mongodb:
-        image: mongo
-        ports:
-          - "27017:27017"
 
     server:
         image: "node:8"
@@ -31,8 +27,8 @@ services:
         ports:
             - 3000:3000
         command: "npm start"
-        
+
     mongo:
         image: mongo
         ports:
-            - "27017:27017"
+            - "27018:27017"
