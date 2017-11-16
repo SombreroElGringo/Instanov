@@ -13,8 +13,8 @@ exports.index = (req, res, next) => {
 	])
 	.then((users, stories) => {
 		res.json({
-			users, 
-			stories
+			users: users, 
+			stories: stories,
 		});
 	})
 	.catch(err => {
