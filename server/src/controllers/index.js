@@ -11,10 +11,10 @@ exports.index = (req, res, next) => {
 		User.find(),
 		Story.find().sort('-date')
 	])
-	.then((users, stories) => {
-		res.json({
-			users, 
-			stories
+	.then(data => {
+		res.json({ 
+			users: data[0],
+			stories: data[1],
 		});
 	})
 	.catch(err => {

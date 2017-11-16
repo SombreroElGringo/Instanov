@@ -72,7 +72,7 @@ app.use((err, req, res, next) => {
 const options = require('./config/mongoose');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI || process.env.MONGOLAB_URI, options)
+mongoose.connect(process.env.MONGODB_DOCKER || process.env.MONGODB_URI || process.env.MONGOLAB_URI, options)
         .then(() => {
             console.log('%s Connection has been established successfully with the database', chalk.green('✓'));
             app.listen(app.get('port'), () => {
