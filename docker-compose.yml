@@ -1,4 +1,4 @@
-version: "3.1"
+version: "3"
 services:
     server:
         image: "node:8"
@@ -6,11 +6,14 @@ services:
         working_dir: /home/node/app
         environment:
             - NODE_ENV=developpement
+            - MONGODB_DOCKER=mongodb://mongo/test
         volumes:
             - ./server:/home/node/app
         ports:
             - 8081:5000
         command: "npm start"
+        links: 
+            - mongo
 
     client:
         image: "node:8"
@@ -24,20 +27,7 @@ services:
             - 8082:3000
         command: "npm start"
 
-    db:
-        image: mysql
-        restart: always
-        environment:
-            MYSQL_ROOT_PASSWORD: example
-
-    phpmyadmin:
-        image: phpmyadmin/phpmyadmin
-        environment:
-            MYSQL_ROOT_PASSWORD: example
-            MYSQL_USER: root
-            MYSQL_PASSWORD: example
-            PMA_USER: root
-            PMA_PASSWORD: example
-        restart: always
+    mongo:
+        image: mongo
         ports:
-         - 8083:80
+            - "27017:27017"
