@@ -8,8 +8,7 @@ const fs = require('fs');
  * Form to add a story
  */
 exports.index = (req, res, next) => {
-    
-	res.json({ 
+	res.json({
 		title: 'Add a new Story!'
 	});
 }

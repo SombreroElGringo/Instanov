@@ -3,8 +3,42 @@ import {Post} from './'
 import moment from 'moment'
 
 export default class Content extends React.Component {
+	state = {
+		posts: null
+	};
+	
+	async fetchPosts() {
+		const url = process.env.REACT_APP_API_URL + '/api/v1/';
+		console.log(url);
+		try {
+			const res = await fetch(url);
+			const json = await res.json();
+			this.setState({
+				posts: json.stories,
+			});
+		} catch (e) {
+			this.setState({
+				posts: [],
+			});
+		}
+	}
+	
+	componentDidMount() {
+		this.fetchPosts().catch(e => console.log(e));
+	}
+	
 	render() {
+		if (this.state.posts){
+			if(this.state.posts.length < 1){
+				return <h3 className={'text-center'}>Aucun contenu</h3>
+			}
+			return null;
+		}
+		
 		return <div className={'news-content'}>
+			{this.state.posts && this.state.posts.map(post => {
+				return <Post post={post} key={post.id}/>
+			})}
 			<Post post={{
 				name: 'truc',
 				image: 'https://unsplash.it/32',
