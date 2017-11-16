@@ -1,0 +1,221 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "API Instanov",
+      "description": "A project web application, who look like Instagram!",
+      "version": "1.0"
+    },
+    "produces": ["application/json"],
+    "paths": {
+      "/": {
+        "get": {
+          "x-swagger-router-controller": "home",
+          "operationId": "index",
+          "tags": ["Index"],
+          "description": "Home page",
+          "parameters": [],
+          "responses": {}
+        }
+      },
+      "/login": {
+         "get": {
+           "x-swagger-router-controller": "login",
+           "operationId": "login",
+           "tags": ["Auth"],
+           "description": "Login page",
+           "parameters": [],
+           "responses": {}
+         }
+       },
+       "/login ": {
+          "post": {
+            "x-swagger-router-controller": "login",
+            "operationId": "login",
+            "tags": ["Auth"],
+            "description": "Sign in using email and password",
+            "parameters": [
+                {   
+                    "name" : "email",
+                    "in": "body",
+                    "required": true,
+                    "description": "Email of the user"
+                }, 
+                {
+                    "name" : "password",
+                    "in": "body",
+                    "required": true,
+                    "description": "Password of the user"
+                }
+            ],
+            "responses": {}
+          }
+        },
+        "/logout": {
+            "get": {
+              "x-swagger-router-controller": "logout",
+              "operationId": "logout",
+              "tags": ["Auth"],
+              "description": "Log out",
+              "parameters": [],
+              "responses": {}
+            }
+        },
+        "/signup": {
+            "get": {
+              "x-swagger-router-controller": "signup",
+              "operationId": "signup",
+              "tags": ["Auth"],
+              "description": "Sign up page",
+              "parameters": [],
+              "responses": {}
+            }
+        },
+        "/signup ": {
+            "post": {
+              "x-swagger-router-controller": "signup",
+              "operationId": "signup",
+              "tags": ["Auth"],
+              "description": "Sign up in using email and password",
+              "parameters": [
+                  {   
+                      "name" : "email",
+                      "in": "body",
+                      "required": true,
+                      "description": "Email of the user"
+                  }, 
+                  {
+                      "name" : "password",
+                      "in": "body",
+                      "required": true,
+                      "description": "Password of the user"
+                  }, 
+                  {
+                      "name" : "confirmPassword",
+                      "in": "body",
+                      "required": true,
+                      "description": "Password of the user"
+                  }
+              ],
+              "responses": {}
+            }
+        },
+        "/account": {
+            "get": {
+              "x-swagger-router-controller": "account",
+              "operationId": "account",
+              "tags": ["Auth"],
+              "description": "Profile page",
+              "parameters": [],
+              "responses": {}
+            }
+        },
+        "/account/profile ": {
+            "post": {
+              "x-swagger-router-controller": "account",
+              "operationId": "account",
+              "tags": ["Auth"],
+              "description": "Update profile information",
+              "parameters": [
+                  {   
+                      "name" : "email",
+                      "in": "body",
+                      "required": true,
+                      "description": "Email of the user"
+                  }, 
+                  {
+                      "name" : "password",
+                      "in": "body",
+                      "required": true,
+                      "description": "Password of the user"
+                  }, 
+                  {
+                      "name" : "confirmPassword",
+                      "in": "body",
+                      "required": true,
+                      "description": "Password of the user"
+                  }
+              ],
+              "responses": {}
+            }
+        },
+        "/account/password": {
+            "post": {
+              "x-swagger-router-controller": "account",
+              "operationId": "account",
+              "tags": ["Auth"],
+              "description": "Update current password",
+              "parameters": [
+                  {
+                      "name" : "password",
+                      "in": "body",
+                      "required": true,
+                      "description": "Password of the user"
+                  }, 
+                  {
+                      "name" : "confirmPassword",
+                      "in": "body",
+                      "required": true,
+                      "description": "Password of the user"
+                  }
+              ],
+              "responses": {}
+            }
+        },
+        "/account/delete": {
+            "post": {
+              "x-swagger-router-controller": "account",
+              "operationId": "account",
+              "tags": ["Auth"],
+              "description": "Delete user account",
+              "parameters": [],
+              "responses": {}
+            }
+        },
+        "/reset/:token": {
+            "get": {
+              "x-swagger-router-controller": "account",
+              "operationId": "account",
+              "tags": ["Auth"],
+              "description": "Reset password page",
+              "parameters": [
+                {   
+                      "name" : "token",
+                      "in": "params",
+                      "required": true,
+                      "description": "Token for reset password"
+                }
+              ],
+              "responses": {}
+            }
+        },
+        "/reset/:token ": {
+            "post": {
+              "x-swagger-router-controller": "account",
+              "operationId": "account",
+              "tags": ["Auth"],
+              "description": "Reset password page",
+              "parameters": [
+                {   
+                      "name" : "token",
+                      "in": "params",
+                      "required": true,
+                      "description": "Token for reset password"
+                },
+                {   
+                    "name" : "password",
+                    "in": "params",
+                    "required": true,
+                    "description": "New password"
+                },
+                {   
+                    "name" : "confirm",
+                    "in": "body",
+                    "required": true,
+                    "description": "New password"
+                }
+              ],
+              "responses": {}
+            }
+        }
+    }
+}

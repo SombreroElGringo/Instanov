@@ -2,9 +2,11 @@
  *  Modules dependencies
  */
 const express = require('express');
+const passport = require('passport');
 const chalk = require('chalk');
 const dotenv = require('dotenv');
 const path = require('path');
+const mongoose = require('mongoose');
 
 /**
  *  Load environment variables from .env file, where API keys and passwords are configured.
@@ -12,25 +14,29 @@ const path = require('path');
 dotenv.load({path: './.env.server'});
 
 /**
+ * Passport configuration.
+ */
+const passportConfig = require('./config/passport');
+
+/**
  *  Create Express Server
  */
 const app = express();
 
 /**
- * Connect to DB.
- */
-//...
-
-
-/**
  * Express configuration.
  */
-module.exports = require('./config/express')(app, process);
+module.exports = require('./config/express')(app, passport);
 
 /**
  * App routes.
  */
-module.exports = require('./src/routes')(app);
+module.exports = require('./src/routes')(app, passportConfig);
+
+/**
+ *  All the stories
+ */
+app.use('/story/embed', express.static(__dirname + '/uploads'));
 
 /**
  * Error 404
@@ -61,11 +67,22 @@ app.use((err, req, res, next) => {
 });
 
 /**
- * Start Express server.
+ * Connect to the Database & start Express server.
  */
-app.listen(app.get('port'), () => {
-  console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env')); 
-  console.log('-- Press CTRL-C to stop --\n');
+const options = require('./config/mongoose');
+
+mongoose.Promise = global.Promise;
+mongoose.connect(process.env.MONGODB_DOCKER || process.env.MONGODB_URI || process.env.MONGOLAB_URI, options)
+        .then(() => {
+            console.log('%s Connection has been established successfully with the database', chalk.green('✓'));
+            app.listen(app.get('port'), () => {
+                console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
+                console.log('-- Press CTRL-C to stop --\n');
+        });
+})    
+.catch(err => {
+    console.error('%s MongoDB connection error. Please make sure MongoDB is running: %s', chalk.red('✗'), err);
 });
+
 
 module.exports = app;
