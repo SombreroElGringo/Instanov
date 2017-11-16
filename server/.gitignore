@@ -60,7 +60,3 @@ typings/
 # Visual Code and PHPStorm
 .idea
 .vscode
-
-# Upload files
-/uploads/*.png
-/uploads/*.jpg

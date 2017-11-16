@@ -6,14 +6,11 @@ services:
         working_dir: /home/node/app
         environment:
             - NODE_ENV=developpement
-            - MONGODB_DOCKER=mongodb://mongo/test
         volumes:
             - ./server:/home/node/app
         ports:
             - 8081:5000
         command: "npm start"
-        links: 
-            - mongo
 
     client:
         image: "node:8"
@@ -27,7 +24,8 @@ services:
             - 8082:3000
         command: "npm start"
 
-    mongo:
-        image: mongo
-        ports:
-            - "27017:27017"
+    data_base:
+        image: mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: MrxW19x^dLyj0f7&hH2B
