@@ -10,7 +10,8 @@ const tracking = window.tracking;
 
 export default class Camera extends React.Component {
 	state = {
-		stream: null
+		stream: null,
+		showFace: false
 	};
 	
 	componentDidMount() {
@@ -27,8 +28,8 @@ export default class Camera extends React.Component {
 			context.clearRect(0, 0, canvas.width, canvas.height);
 			event.data.forEach((rect) => {
 				this.setState({
-					//rect: <img src={"http://www.freeiconspng.com/uploads/trump-face-png-21.png"} style={{
-					rect: <img src={"http://pngimg.com/uploads/hitler/hitler_PNG10.png"} style={{
+					//rect: <img src={"http://pngimg.com/uploads/hitler/hitler_PNG10.png"} style={{
+					rect: <img src={"http://www.freeiconspng.com/uploads/trump-face-png-21.png"} style={{
 						backgroundImage: 'url("")',
 						position: 'absolute',
 						top: rect.y - 20,
@@ -46,7 +47,8 @@ export default class Camera extends React.Component {
 				facingMode: 'user'
 			}
 		}).then(stream => {
-			this.camera.srcObject = stream;
+			if(this.camera)
+				this.camera.srcObject = stream;
 		});
 	}
 	
@@ -58,11 +60,16 @@ export default class Camera extends React.Component {
 		canvas.getContext('2d')
 		      .drawImage(video, 0, 0, canvas.width, canvas.height);
 		
-		this.thumbnail.src = canvas.toDataURL();
-		this.thumbnail.style.maxWidth = '100px';
-		this.thumbnail.style.maxHeight = '100px';
-		this.thumbnail.style.opacity = '1';
+			this.thumbnail.src = canvas.toDataURL();
+			this.thumbnail.style.maxWidth = '100px';
+			this.thumbnail.style.maxHeight = '100px';
+			this.thumbnail.style.opacity = '1';
+			this.thumbnail.style.transform = 'rotateY(180deg)';
 		
+		setTimeout(() => {
+			this.thumbnail.removeAttribute('src');
+			this.thumbnail.removeAttribute('style');
+		}, 3000)
 	};
 	
 	render() {
@@ -88,7 +95,9 @@ export default class Camera extends React.Component {
 					height: '100%',
 					width: window.innerWidth
 				}}/>
-				{this.state.rect}
+				<div style={{display: !this.state.showFace ? 'none' : 'block'}}>
+					{this.state.rect}
+				</div>
 			</div>
 			<div style={{color: 'whitesmoke', fontSize: '30px', display: 'flex', justifyContent: 'space-between'}}>
 				<div style={{flex: 1, display: 'flex', justifyContent: 'space-around'}}>
@@ -123,7 +132,7 @@ export default class Camera extends React.Component {
 				</div>
 				<div style={{flex: 1, display: 'flex', justifyContent: 'space-around'}}>
 					<i className={'fa fa-refresh'}/>
-					<i className={'fa fa-smile-o'}/>
+					<i className={'fa fa-smile-o'} onClick={() => this.setState({showFace: !this.state.showFace})}/>
 				</div>
 			</div>
 		</div>
