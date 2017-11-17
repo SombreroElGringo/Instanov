@@ -1,13 +1,29 @@
 import React, {Component} from 'react';
 import {Header, News, Content} from './components'
 import {Camera} from './screens'
-import {Route, BrowserRouter as Router} from 'react-router-dom'
+import {Route, Redirect, BrowserRouter as Router} from 'react-router-dom'
 import './App.css';
 import Sign from './components/sign'
 
 class App extends Component {
+	constructor(props) {
+		super(props);
+	
+		this.state = {
+		  isAuth: null,
+		}
+	}
+
+	handleAuth = (auth) => {
+		this.setState({
+			isAuth: auth,
+		});
+	}
+
 	render() {
 		
+		const {isAuth} = this.state;
+
 		return <Router>
 			<div>
 				<Route exact path={"/"} component={() => <div>
@@ -25,13 +41,13 @@ class App extends Component {
 					</div>
 				</div>}/>
 
-				<Route exact path={"/sign"} component={() => <div>
- 					<div>
-						 <section className={'fs-fafafa'}>
- 						<Sign type={'signup'} />
-						 </section>
- 					</div>
- 				</div>}/>
+				<Route exact path={"/sign"} component={() => (
+					<div>
+						<section className={'fs-fafafa'}>
+							<Sign type={'signup'} onAuth={this.handleAuth} isAuth={isAuth} />
+						</section>
+					</div>
+				)}/>
 
 			</div>
 		</Router>;
