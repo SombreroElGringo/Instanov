@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Header, News, Content} from './components'
 import {Camera} from './screens'
 import {Route, BrowserRouter as Router} from 'react-router-dom'
-import './App.css';
+import './assets/css/App.css';
 import Sign from './components/sign'
 
 class App extends Component {
