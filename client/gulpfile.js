@@ -49,7 +49,7 @@ gulp.task('sass', function() {
         .pipe(sass(sassOptions))
         .pipe(autoprefixer(autoprefixerOptions))
         .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest('src/css'))
+        .pipe(gulp.dest('src/assets/css'))
         .pipe(filter(filterOptions))
         .pipe(reload(reloadOptions));
 });
