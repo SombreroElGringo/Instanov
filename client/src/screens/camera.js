@@ -115,24 +115,24 @@ export default class Camera extends React.Component {
 						justifyContent: 'center',
 					}}>
 						<div style={{
+							position: 'absolute',
 							backgroundColor: 'rgba(211, 211, 211, 0.49)',
 							width: '100%',
 							height: '100%',
 							borderRadius: '50%',
-						}}>
-							<div style={{
-                                backgroundColor: 'white',
-                                margin: '15%',
-                                width: '70%',
-                                height: '70%',
-                                borderRadius: '50%'
-                            }}/>
-						</div>
+						}}/>
+						<div style={{
+							position: 'absolute',
+							backgroundColor: 'white',
+							width: '70%',
+							height: '70%',
+							borderRadius: '50%'
+						}}/>
 					</div>
 				</div>
 				<div style={{flex: 1, display: 'flex', justifyContent: 'space-around'}}>
 					<i className={'fa fa-refresh'}/>
-					<i className={this.state.showFace ? 'fa fa-smile-o' : 'fa fa-frown-o'} onClick={() => this.setState({showFace: !this.state.showFace})}/>
+					<i className={'fa fa-smile-o'} onClick={() => this.setState({showFace: !this.state.showFace})}/>
 				</div>
 			</div>
 		</div>
