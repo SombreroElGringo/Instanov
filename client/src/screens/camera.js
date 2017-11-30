@@ -71,29 +71,30 @@ export default class Camera extends React.Component {
 			const ctx = this.canvas.getContext("2d");
 			ctx.transform(-1, 0, 0, 1, this.canvas.width, 0);
 			
+			
 			console.log({
 				video: {
-					height: this.video.videoWidth,
-					width: this.video.videoHeight
+					width: this.video.videoWidth,
+					height: this.video.videoHeight
 				},
 				canvas: {
-					height: this.canvas.height,
 					width: this.canvas.width,
-				},
-				ratio: {
-					height: (this.canvas.height),
-					width: (this.video.videoWidth * this.canvas.width) / this.video.videoWidth
+					height: this.canvas.height
 				}
 			});
 			
+			const multiplicator = this.canvas.height / this.video.videoHeight;
+			const newHeight= this.video.videoHeight*multiplicator;
+			const newWidth = this.video.videoWidth*multiplicator;
+			
 			ctx.drawImage(
-				this.video, 0, 0,
-				(this.video.videoWidth * this.canvas.width) / this.video.videoWidth,
-				(this.canvas.height)
+				this.video, (-newWidth/2)+(this.canvas.width/2), 0,
+				newWidth,
+				newHeight
 			);
 			this.thumbnail.src = this.canvas.toDataURL();
 			ctx.transform(-1, 0, 0, 1, this.canvas.width, 0);
-			//ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
+			ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
 		}, 100)
 	}
 }
