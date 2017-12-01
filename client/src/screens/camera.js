@@ -18,8 +18,8 @@ export default class Camera extends React.Component {
 			</div>
 			<div className={"analysis-block"}
 			     ref={ref => this.spaceToCapture = ref}>
-				<video ref={ref => this.video = ref}/>
-				<canvas ref={ref => this.canvas = ref}/>
+				<video ref={ref => this.video = ref} width={window.innerWidth} height={window.innerHeight}/>
+				<canvas ref={ref => this.canvas = ref} width={window.innerWidth} height={window.innerHeight}/>
 			</div>
 			<div className="controls">
 				<div className="capture"
@@ -43,8 +43,9 @@ export default class Camera extends React.Component {
 	}
 	
 	setUpCanvas() {
-		this.canvas.width = window.innerWidth;
-		this.canvas.height = window.innerHeight;
+		const face = new Image();
+		face.src = "http://pluspng.com/img-png/glasses-png-glasses-png-image-2400.png";
+	
 	}
 	
 	setUpCamera() {
@@ -58,6 +59,39 @@ export default class Camera extends React.Component {
 			navigator.getUserMedia({video: true}, stream => {
 				this.video.src = window.URL.createObjectURL(stream);
 				this.video.play();
+				
+				let videoInput = this.video;
+				let clm = window.clm;
+				let ctracker = new clm.tracker();
+				let requestAnimFrame = window.requestAnimationFrame
+				ctracker.init();
+				ctracker.start(videoInput);
+				
+				function positionLoop() {
+					requestAnimFrame(positionLoop);
+					let positions = ctracker.getCurrentPosition();
+					// do something with the positions ...
+					// print the positions
+					let positionString = "";
+					if (positions) {
+						for (let p = 0; p < 10; p++) {
+							positionString += "featurepoint " + p + " : [" + positions[p][0].toFixed(2) + "," + positions[p][1].toFixed(2) + "]<br/>";
+						}
+					}
+				}
+				
+				positionLoop();
+				let canvasInput = this.canvas;
+				let cc = canvasInput.getContext('2d');
+				
+				function drawLoop() {
+					requestAnimFrame(drawLoop);
+					cc.clearRect(0, 0, canvasInput.width, canvasInput.height);
+					ctracker.draw(canvasInput);
+				}
+				
+				drawLoop();
+				
 			}, err => {
 				console.log(err)
 			});
@@ -71,24 +105,26 @@ export default class Camera extends React.Component {
 			const ctx = this.canvas.getContext("2d");
 			ctx.transform(-1, 0, 0, 1, this.canvas.width, 0);
 			
+			let multiplicator;
+			let newHeight;
+			let newWidth;
+			let toLeft = 0;
+			let toTop = 0;
+			if(this.canvas.width < this.canvas.height){
+				multiplicator = this.canvas.height / this.video.videoHeight;
+				newHeight = this.video.videoHeight * multiplicator;
+				newWidth = this.video.videoWidth * multiplicator;
+				toLeft = (-newWidth / 2) + (this.canvas.width / 2);
+			}else{
+				multiplicator = this.canvas.width / this.video.videoWidth;
+				newHeight = this.video.videoHeight * multiplicator;
+				newWidth = this.video.videoWidth * multiplicator;
+				toTop = (-newHeight / 2) + (this.canvas.height / 2)
+			}
 			
-			console.log({
-				video: {
-					width: this.video.videoWidth,
-					height: this.video.videoHeight
-				},
-				canvas: {
-					width: this.canvas.width,
-					height: this.canvas.height
-				}
-			});
-			
-			const multiplicator = this.canvas.height / this.video.videoHeight;
-			const newHeight= this.video.videoHeight*multiplicator;
-			const newWidth = this.video.videoWidth*multiplicator;
 			
 			ctx.drawImage(
-				this.video, (-newWidth/2)+(this.canvas.width/2), 0,
+				this.video, toLeft, toTop,
 				newWidth,
 				newHeight
 			);

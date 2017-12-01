@@ -9,7 +9,6 @@ export default class Content extends React.Component {
 	
 	async fetchPosts() {
 		const url = process.env.REACT_APP_API_URL + '/';
-		console.log(url);
 		try {
 			const res = await fetch(url);
 			const json = await res.json();
