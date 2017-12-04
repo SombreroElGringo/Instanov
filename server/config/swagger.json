@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
       "title": "API Instanov",
-      "description": "A project web application, who look like Instagram!",
+      "description": "A web application project that looks like Instagram!",
       "version": "1.0"
     },
     "produces": ["application/json"],

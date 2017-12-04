@@ -13,7 +13,14 @@ export default class Post extends Component{
 			date,
 			likes,
 		} = this.props.post;
-		
+
+		const username = 'Plopy3'; //Replace with real username
+
+		const like = () => {
+			username in likes ? likes.push(username) : likes.pop(username);
+			console.log(likes);
+		};
+
 		return <div className={'post animated fadeIn'}>
 			<div className={'post-header d-flex justify-content-between align-items-center'}>
 				<div className={'d-flex align-items-center'}>
@@ -27,7 +34,7 @@ export default class Post extends Component{
 			<img src={featured} className={'post-featured'} alt=""/>
 			<div className={'d-flex post-actions justify-content-between pt-1 pb-1'} >
 				<div className={'d-flex'}>
-					<i className={'fa fa-heart-o'}/>
+					<i onClick={like} className={likes.indexOf(username) > -1 ? 'fa fa-heart' : 'fa fa-heart-o'}/>
 					<i className={'fa fa-comment-o'}/>
 					<i className={'fa fa-paper-plane-o'}/>
 				</div>
@@ -35,7 +42,7 @@ export default class Post extends Component{
 					<i className={'fa fa-bookmark-o'}/>
 				</div>
 			</div>
-			{likes && <div className={'p-1'}>
+			{likes && likes.length > 0 && <div className={'p-1'}>
 				Aimé par <b>{likes.slice(0, 2).join(', ')}</b>
 				{likes.length > 2 && <span> et <b>{likes.length - 2} autre{likes.length > 3 && 's'} personne{likes.length > 3 && 's'}</b></span>}
 			</div>}

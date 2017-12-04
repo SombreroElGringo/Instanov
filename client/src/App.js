@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {Header, News, Content} from './components'
-import {Camera} from './screens'
-import {Route, Redirect, BrowserRouter as Router} from 'react-router-dom'
+import {Header, News, Content} from './components';
+import {Camera} from './screens';
+import {Route, Redirect, BrowserRouter as Router} from 'react-router-dom';
 import './App.css';
-import Sign from './components/sign'
+import Sign from './components/sign';
 
 class App extends Component {
 	constructor(props) {

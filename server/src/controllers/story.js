@@ -8,8 +8,7 @@ const fs = require('fs');
  * Form to add a story
  */
 exports.index = (req, res, next) => {
-    
-	res.json({ 
+	res.json({
 		title: 'Add a new Story!'
 	});
 }
@@ -24,7 +23,7 @@ exports.createStory = (req, res, next) => {
     const errors = req.validationErrors();
     
     if (errors) {
-        res.json({
+        return res.json({
             code: 400,
             status: 'error',
             message: 'username cannot be empty!'

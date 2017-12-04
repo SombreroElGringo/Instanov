@@ -28,8 +28,8 @@ export default class Camera extends React.Component {
 			context.clearRect(0, 0, canvas.width, canvas.height);
 			event.data.forEach((rect) => {
 				this.setState({
-					//rect: <img src={"http://pngimg.com/uploads/hitler/hitler_PNG10.png"} style={{
-					rect: <img src={"http://www.freeiconspng.com/uploads/trump-face-png-21.png"} style={{
+					//rect: <img src={"http://www.freeiconspng.com/uploads/trump-face-png-21.png"} style={{
+					rect: <img src={"http://pngimg.com/uploads/hitler/hitler_PNG10.png"} style={{
 						backgroundImage: 'url("")',
 						position: 'absolute',
 						top: rect.y - 20,
