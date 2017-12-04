@@ -45,7 +45,7 @@ exports.createStory = (req, res, next) => {
     });
 
     story.save().then(err => {
-        res.json({
+        res.status(201).json({
             code: 201,
             status: 'success',
             message: 'Story created!'

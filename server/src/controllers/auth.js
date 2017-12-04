@@ -10,13 +10,13 @@ const User = require('../models/User');
  */
 exports.getLogin = (req, res) => {
     if (req.user) {
-        res.json({
-            code: 404,
+        return res.status(403).json({
+            code: 403,
             status: 'error',
             message: 'You are already logged in!',
         });
     }
-    res.json({
+    return res.json({
         title: 'Login'
     });
 };
@@ -29,21 +29,21 @@ exports.postLogin = (req, res, next) => {
     req.assert('email', 'Email is not valid').isEmail();
     req.assert('password', 'Password cannot be blank').notEmpty();
     req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
-  
+
     const errors = req.validationErrors();
   
     if (errors) {
-        res.json({
-            code: 404,
+        return res.status(400).json({
+            code: 400,
             status: 'error',
             message: errors.msg,
         });
     }
-  
+    
     passport.authenticate('local', (err, user, info) => {
         if (err) { return next(err); }
         if (!user) {
-            res.json({
+            return res.status(404).json({
                 code: 404,
                 status: 'error',
                 message: info,
@@ -51,7 +51,7 @@ exports.postLogin = (req, res, next) => {
         }
         req.logIn(user, (err) => {
             if (err) { return next(err); }
-            res.json({
+            return res.status(200).json({
                 code: 200,
                 status: 'success',
                 message: 'Success! You are logged in.',
@@ -66,7 +66,7 @@ exports.postLogin = (req, res, next) => {
  */
 exports.logout = (req, res) => {
     req.logout();
-    res.json({
+    return res.status(200).json({
         code: 200,
         status: 'success',
         message: 'Success! You are logged out!',
@@ -79,13 +79,13 @@ exports.logout = (req, res) => {
  */
 exports.getSignup = (req, res) => {
     if (req.user) {
-        res.json({
-            code: 404,
+        return res.status(403).json({
+            code: 403,
             status: 'error',
             message: 'You are already logged in!',
         });
     }
-    res.json({
+    return res.status(200).json({
         title: 'Create Account'
     });
 };
@@ -103,36 +103,49 @@ exports.postSignup = (req, res, next) => {
     const errors = req.validationErrors();
   
     if (errors) {
-        res.json({
-            code: 404,
+        return res.status(400).json({
+            code: 400,
             status: 'error',
-            message: errors.msg,
+            message: errors,
         });
     }
   
     const user = new User({
         email: req.body.email,
-        password: req.body.password
+        password: req.body.password,
+        profile : {
+            username: req.body.username,
+            name: req.body.name,
+        }
     });
   
     User.findOne({ email: req.body.email }, (err, existingUser) => {
       if (err) { return next(err); }
       if (existingUser) {
-        res.json({
-            code: 404,
+        return res.status(400).json({
+            code: 400,
             status: 'error',
             message: 'Account with that email address already exists.',
         });
       }
       user.save((err) => {
-        if (err) { return next(err); }
+        if (err) { 
+            if (err.code === 11000) {
+                return res.status(400).json({
+                    code: 400,
+                    status: 'error',
+                    message: 'Username already exists.',
+                });
+            }
+        }
         req.logIn(user, (err) => {
             if (err) {
                 return next(err);
             }
-            res.json({
-                code: 200,
+            return res.status(201).json({
+                code: 201,
                 status: 'success',
+                message: 'User created!'
             });
         });
       });
@@ -144,7 +157,7 @@ exports.postSignup = (req, res, next) => {
  * Profile page.
  */
 exports.getAccount = (req, res) => {
-    res.json({
+    return res.status(200).json({
         title: 'My Account'
     });
 };
@@ -160,10 +173,10 @@ exports.postUpdateProfile = (req, res, next) => {
     const errors = req.validationErrors();
   
     if (errors) {
-        res.json({
-            code: 404,
+        return res.status(400).json({
+            code: 400,
             status: 'error',
-            message: errors.msg,
+            message: errors,
         });
     }
   
@@ -177,15 +190,15 @@ exports.postUpdateProfile = (req, res, next) => {
         user.save((err) => {
             if (err) {
                 if (err.code === 11000) {
-                    res.json({
-                        code: 404,
+                    return res.status(400).json({
+                        code: 400,
                         status: 'error',
                         message: 'The email address you have entered is already associated with an account.',
                     });
                 }
                 return next(err);
             }
-            res.json({
+            return res.status(200).json({
                 code: 200,
                 status: 'success',
                 message: 'Profile information has beeb updated!',
@@ -205,10 +218,10 @@ exports.postUpdatePassword = (req, res, next) => {
     const errors = req.validationErrors();
   
     if (errors) {
-        res.json({
-            code: 404,
+        return res.status(400).json({
+            code: 400,
             status: 'error',
-            message: errors.msg,
+            message: errors,
         });
     }
   
@@ -217,7 +230,7 @@ exports.postUpdatePassword = (req, res, next) => {
         user.password = req.body.password;
         user.save((err) => {
             if (err) { return next(err); }
-            res.json({
+            return res.status(200).json({
                 code: 200,
                 status: 'success',
                 message: 'Password has been changed!',
@@ -234,7 +247,7 @@ exports.postDeleteAccount = (req, res, next) => {
     User.remove({ _id: req.user.id }, (err) => {
         if (err) { return next(err); }
         req.logout();
-        res.json({
+        return res.status(200).json({
             code: 200,
             status: 'success',
             message: 'Your account has been deleted!',
@@ -248,8 +261,8 @@ exports.postDeleteAccount = (req, res, next) => {
  */
 exports.getReset = (req, res, next) => {
     if (req.isAuthenticated()) {
-        res.json({
-            code: 404,
+        return res.status(400).json({
+            code: 400,
             status: 'error',
             message: 'You are already logged in!',
         });
@@ -259,13 +272,13 @@ exports.getReset = (req, res, next) => {
         .exec((err, user) => {
             if (err) { return next(err); }
             if (!user) {
-                res.json({
-                    code: 404,
+                return res.status(400).json({
+                    code: 400,
                     status: 'error',
                     message: 'Password reset token is invalid or has expired!',
                 });
             }
-            res.json({
+            return res.status(200).json({
                 title: 'Password Reset'
             });
         }
@@ -283,10 +296,10 @@ exports.postReset = (req, res, next) => {
     const errors = req.validationErrors();
   
     if (errors) {
-        res.json({
-            code: 404,
+        return res.status(400).json({
+            code: 400,
             status: 'error',
-            message: errors.msg,
+            message: errors,
         });
     }
   
@@ -295,8 +308,8 @@ exports.postReset = (req, res, next) => {
             .where('passwordResetExpires').gt(Date.now())
             .then((user) => {
                 if (!user) {
-                    res.json({
-                        code: 404,
+                    return res.status(400).json({
+                        code: 400,
                         status: 'error',
                         message: 'Password reset token is invalid or has expired!',
                     });
@@ -330,7 +343,7 @@ exports.postReset = (req, res, next) => {
     resetPassword().then(sendResetPasswordEmail)
                    .then(() => { 
                        if (!res.finished) {
-                            res.json({
+                            return res.status(200).json({
                                 code: 200,
                                 status: 'success',
                                 message: 'Success! Your password has been changed.',
@@ -346,13 +359,13 @@ exports.postReset = (req, res, next) => {
  */
 exports.getForgot = (req, res) => {
     if (req.isAuthenticated()) {
-        res.json({
-            code: 404,
+        return res.status(400).json({
+            code: 400,
             status: 'error',
             message: 'You are already logged! If you want change your password edit your Account!',
         });
     }
-    res.json({
+    return res.status(200).json({
         title: 'Forgot Password'
     });
 };
@@ -368,10 +381,10 @@ exports.postForgot = (req, res, next) => {
     const errors = req.validationErrors();
   
     if (errors) {
-        res.json({
-            code: 404,
+        return res.status(400).json({
+            code: 400,
             status: 'error',
-            message: errors.msg,
+            message: errors,
         });
     }
   
@@ -382,7 +395,7 @@ exports.postForgot = (req, res, next) => {
         User.findOne({ email: req.body.email })
             .then((user) => {
                 if (!user) {
-                    res.json({
+                    return res.status(404).json({
                         code: 404,
                         status: 'error',
                         message: 'Accout with that email address does not exist!',
@@ -409,7 +422,7 @@ exports.postForgot = (req, res, next) => {
             If you did not request this, please ignore this email and your password will remain unchanged.\n`
         };
         return transporter.sendMail(mailOptions).then(() => {
-            res.json({
+            return res.status(200).json({
                 code: 200,
                 status: 'success',
                 message: `An e-mail has been sent to ${user.email} with further instructions.`,

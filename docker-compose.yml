@@ -1,22 +1,13 @@
-version: "3"
+version: '3'
 services:
+  mongo:
+    image: mongo:latest
+    ports:
+            - "27018:27017"
+  
+  server:
 
-    server:
-        image: "node:8"
-        user: "node"
-        working_dir: /home/node/app
-        environment:
-            - NODE_ENV=developpement
-            - MONGODB_DOCKER=mongodb://mongo/test
-        volumes:
-            - ./server:/home/node/app
-        ports:
-            - 5000:5000
-        command: "npm start"
-        links: 
-            - mongo
-
-    client:
+  client:
         image: "node:8"
         user: "node"
         working_dir: /home/node/app
@@ -26,9 +17,5 @@ services:
             - ./client:/home/node/app
         ports:
             - 3000:3000
-        command: "npm start"
+        command: "npm start"  
 
-    mongo:
-        image: mongo
-        ports:
-            - "27018:27017"
