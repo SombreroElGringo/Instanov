@@ -48,6 +48,7 @@ export default class Sign extends Component{
         .then((res) => res.json())
         .then((response) => {
             if (response.status === 'success') {
+                // console.log(response)
                 /*this.setState({
                     isAuth: true,
                 })*/
