@@ -102,6 +102,7 @@ export default class Sign extends Component{
                             </div>
                         ) : (
                             <div>
+                                <h2 className={'app-sub-title'}>Vous nous avez manqué !</h2>
                                 <span className='info'></span>
                                 <form onSubmit={e => this.handleSubmit(e)}>
                                     <div className={'inpt-d'}>
@@ -115,10 +116,8 @@ export default class Sign extends Component{
                             </div>      
                         )}
 
-                        <div className={'_lines'}>
-                            <div className={'_line'}></div>
-                            <div className={'_OR'}>ou</div>
-                            <div className={'_line'}></div>
+                        <div className={'_line'}>
+                            <span className={'_t_line'}>OU</span>
                         </div>
 
                         <div> 

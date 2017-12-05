@@ -12,7 +12,7 @@ const userSchema = new  mongoose.Schema({
 
     profile: {
         name: String,
-        username: { type: String, unique: true},
+        username: { type: String, unique: true, lowercase: true },
         picture: String,
         bibliography: String,
     }

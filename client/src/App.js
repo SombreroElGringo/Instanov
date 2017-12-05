@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import {Header, News, Content} from './components';
 import {Camera} from './screens';
 import {Route, Redirect, BrowserRouter as Router} from 'react-router-dom';
-import './App.css';
-import Sign from './components/sign';
+import './assets/css/App.css';
+import Sign from './components/account/sign';
+import Profile from './components/account/profile';
 
 class App extends Component {
 	constructor(props) {
@@ -45,6 +46,14 @@ class App extends Component {
 					<div>
 						<section className={'fs-fafafa'}>
 							<Sign type={'signup'} onAuth={this.handleAuth} isAuth={isAuth} />
+						</section>
+					</div>
+				)}/>
+
+				<Route exact path={"/profiles/:username"} component={() => (
+					<div>
+						<section className={'fs-fafafa'}>
+							<Profile />
 						</section>
 					</div>
 				)}/>

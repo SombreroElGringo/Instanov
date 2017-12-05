@@ -153,7 +153,7 @@ exports.postSignup = (req, res, next) => {
 };
 
 /**
- * GET /account
+ * GET /accounts
  * Profile page.
  */
 exports.getAccount = (req, res) => {
@@ -163,7 +163,7 @@ exports.getAccount = (req, res) => {
 };
 
 /**
- * POST /account/profile
+ * POST /accounts/profile
  * Update profile information.
  */
 exports.postUpdateProfile = (req, res, next) => {
@@ -208,7 +208,7 @@ exports.postUpdateProfile = (req, res, next) => {
 };
 
 /**
- * POST /account/password
+ * POST /accounts/password
  * Update current password.
  */
 exports.postUpdatePassword = (req, res, next) => {
@@ -240,7 +240,7 @@ exports.postUpdatePassword = (req, res, next) => {
 };
   
 /**
- * POST /account/delete
+ * POST /accounts/delete
  * Delete user account.
  */
 exports.postDeleteAccount = (req, res, next) => {

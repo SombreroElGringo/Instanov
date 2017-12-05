@@ -2,16 +2,20 @@ import React from 'react'
 import {Post} from './'
 import moment from 'moment'
 
+const API_URL = process.env.REACT_APP_PROD_API_URL || process.env.REACT_APP_DEV_API_URL;
+
 export default class Content extends React.Component {
 	state = {
 		posts: null
 	};
 	
 	async fetchPosts() {
-		const url = process.env.REACT_APP_API_URL + '/';
+		const url = API_URL + '/';
 		console.log(url);
 		try {
-			const res = await fetch(url);
+			const res = await fetch(url, {
+				credentials: 'include',
+			});
 			const json = await res.json();
 			console.log(json.stories)
 			this.setState({
@@ -48,7 +52,7 @@ export default class Content extends React.Component {
 				
 				console.log(newPost)
 				
-				return <Post post={newPost} key={post.id}/>
+				return <Post post={newPost} key={post._id}/>
 			})}
 		</div>
 	}

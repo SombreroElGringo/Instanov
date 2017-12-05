@@ -14,6 +14,7 @@ const upload = multer({ storage: getStorage() });
 const apiController = require('./controllers/api');
 const authController = require('./controllers/auth');
 const indexController = require('./controllers/index');
+const profileController = require('./controllers/profile');
 const storyController = require('./controllers/story');
 
 
@@ -35,10 +36,20 @@ module.exports = function(app, passport) {
     app.post('/reset/:token', authController.postReset);
     app.get('/signup', authController.getSignup);
     app.post('/signup', authController.postSignup);
-    app.get('/account', passport.isAuthenticated, authController.getAccount);
-    app.post('/account/profile', passport.isAuthenticated, authController.postUpdateProfile);
-    app.post('/account/password', passport.isAuthenticated, authController.postUpdatePassword);
-    app.post('/account/delete', passport.isAuthenticated, authController.postDeleteAccount);
+
+    /**
+     * Account routes
+     */
+    app.get('/accounts', passport.isAuthenticated, authController.getAccount);
+    app.post('/accounts/profile', passport.isAuthenticated, authController.postUpdateProfile);
+    app.post('/accounts/password', passport.isAuthenticated, authController.postUpdatePassword);
+    app.post('/accounts/delete', passport.isAuthenticated, authController.postDeleteAccount);
+
+    /**
+     * Profiles routes
+     */
+
+    app.get('/profiles/:username', passport.isAuthenticated, profileController.index);
 
     /**
      * Story routes
