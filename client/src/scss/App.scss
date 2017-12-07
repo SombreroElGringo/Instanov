@@ -65,35 +65,6 @@ img {
   background-image: url("https://placehold.it/64x64/aaa/aaa");
 }
 
-.camera {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: column;
-  height: 100vh;
-  font-size: 20px;
-  color: white;
-  background-color: black;
-
-  .thumbnail {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    opacity: 0;
-    transition: all 400ms;
-  }
-
-  & > div {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-  }
-  .camera-visualizer {
-    //transform: rotateY(180deg);
-  }
-}
 
 @for $i from 1 through 5 {
   .p-#{$i} {
