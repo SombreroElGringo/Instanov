@@ -22,7 +22,7 @@ module.exports = function(app, passport) {
     /**
      * Primary app routes.
      */
-   app.get('/', indexController.index);
+   app.get('/', passport.isAuthenticated, indexController.index);
 
     /**
      * Auth routes
@@ -41,36 +41,40 @@ module.exports = function(app, passport) {
      * Account routes
      */
     app.get('/accounts', passport.isAuthenticated, authController.getAccount);
-    app.post('/accounts/profile', passport.isAuthenticated, authController.postUpdateProfile);
-    app.post('/accounts/password', passport.isAuthenticated, authController.postUpdatePassword);
-    app.post('/accounts/delete', passport.isAuthenticated, authController.postDeleteAccount);
+    app.put('/accounts/profile', passport.isAuthenticated, authController.editAccount);
+    app.put('/accounts/password', passport.isAuthenticated, authController.editPassword);
+    app.delete('/accounts/delete', passport.isAuthenticated, authController.deleteAccount);
 
     /**
      * Profiles routes
      */
-
     app.get('/profiles/:username', passport.isAuthenticated, profileController.index);
 
     /**
      * Story routes
      */
-
-    app.get('/story', storyController.index);
     app.post('/story', upload.single('story'), storyController.createStory);
     app.put('/story/:id', storyController.editStoryById);
     app.delete('/story/:id', storyController.deleteStoryById);
+    app.put('/story/:id/like/:username', storyController.likeStoryById);
 
     /**
      * API routes.
      */
     app.get('/api/v1', auth.middleware, apiController.getApi);
 
-
     return app;
 }
 
+
 /**
- *  Functions
+ *  Functions for multer
+ */
+
+/** 
+ * Get the storage
+ * @function getStorage
+ * @return {Data} storage - Storage
  */
 function getStorage() {
     let storage = multer.diskStorage({
@@ -87,6 +91,12 @@ function getStorage() {
     return storage;
 }
 
+/** 
+ * Get the extension of a file
+ * @function getExtension
+ * @param {Data} file - File
+ * @return {string} result - File's extension
+ */
 function getExtension(file) {
     let result = '';
     if (file.mimetype === 'image/jpeg') result = '.jpg';

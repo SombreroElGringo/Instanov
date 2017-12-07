@@ -4,13 +4,18 @@ const nodemailer = require('nodemailer');
 const passport = require('passport');
 const User = require('../models/User');
 
-/**
- * GET /login
- * Login page.
+/** 
+ *  Login page
+ * @function getLogin
+ * @name /login
+ * @method GET
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
  */
 exports.getLogin = (req, res) => {
     if (req.user) {
-        return res.status(403).json({
+        return res.status(403)
+            .json({
             code: 403,
             status: 'error',
             message: 'You are already logged in!',
@@ -21,9 +26,14 @@ exports.getLogin = (req, res) => {
     });
 };
 
-/**
- * POST /login
- * Sign in using email and password.
+/** 
+ *  Sign in with the email & password
+ * @function postLogin
+ * @name /login
+ * @method POST
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function 
  */
 exports.postLogin = (req, res, next) => {
     req.assert('email', 'Email is not valid').isEmail();
@@ -33,7 +43,8 @@ exports.postLogin = (req, res, next) => {
     const errors = req.validationErrors();
   
     if (errors) {
-        return res.status(400).json({
+        return res.status(400)
+            .json({
             code: 400,
             status: 'error',
             message: errors.msg,
@@ -43,7 +54,8 @@ exports.postLogin = (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if (err) { return next(err); }
         if (!user) {
-            return res.status(404).json({
+            return res.status(404)
+                .json({
                 code: 404,
                 status: 'error',
                 message: info,
@@ -51,7 +63,8 @@ exports.postLogin = (req, res, next) => {
         }
         req.logIn(user, (err) => {
             if (err) { return next(err); }
-            return res.status(200).json({
+            return res.status(200)
+                .json({
                 code: 200,
                 status: 'success',
                 message: 'Success! You are logged in.',
@@ -60,42 +73,60 @@ exports.postLogin = (req, res, next) => {
     })(req, res, next);
 };
 
-/**
- * GET /logout
- * Log out.
+/** 
+ *  Log out
+ * @function logout
+ * @name /logout
+ * @method GET
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
  */
 exports.logout = (req, res) => {
     req.logout();
-    return res.status(200).json({
+    return res.status(200)
+        .json({
         code: 200,
         status: 'success',
         message: 'Success! You are logged out!',
     });
 };
 
-/**
- * GET /signup
- * Signup page.
+/** 
+ *  Sign up page
+ * @function getSignup
+ * @name /signup
+ * @method GET
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
  */
 exports.getSignup = (req, res) => {
     if (req.user) {
-        return res.status(403).json({
+        return res.status(403)
+            .json({
             code: 403,
             status: 'error',
             message: 'You are already logged in!',
         });
     }
-    return res.status(200).json({
+    return res.status(200)
+        .json({
         title: 'Create Account'
     });
 };
 
-/**
- * POST /signup
- * Create a new local account.
+/** 
+ *  Sign up with the email & password
+ * @function postSignup
+ * @name /signup
+ * @method POST
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function 
  */
 exports.postSignup = (req, res, next) => {
     req.assert('email', 'Email is not valid').isEmail();
+    req.assert('name', 'Name cannot be blank').notEmpty();
+    req.assert('username', 'Username cannot be blank').notEmpty();
     req.assert('password', 'Password must be at least 4 characters long').len(4);
     req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
     req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
@@ -103,7 +134,8 @@ exports.postSignup = (req, res, next) => {
     const errors = req.validationErrors();
   
     if (errors) {
-        return res.status(400).json({
+        return res.status(400)
+            .json({
             code: 400,
             status: 'error',
             message: errors,
@@ -122,7 +154,8 @@ exports.postSignup = (req, res, next) => {
     User.findOne({ email: req.body.email }, (err, existingUser) => {
       if (err) { return next(err); }
       if (existingUser) {
-        return res.status(400).json({
+        return res.status(400)
+            .json({
             code: 400,
             status: 'error',
             message: 'Account with that email address already exists.',
@@ -131,7 +164,8 @@ exports.postSignup = (req, res, next) => {
       user.save((err) => {
         if (err) { 
             if (err.code === 11000) {
-                return res.status(400).json({
+                return res.status(400)
+                    .json({
                     code: 400,
                     status: 'error',
                     message: 'Username already exists.',
@@ -142,7 +176,8 @@ exports.postSignup = (req, res, next) => {
             if (err) {
                 return next(err);
             }
-            return res.status(201).json({
+            return res.status(201)
+                .json({
                 code: 201,
                 status: 'success',
                 message: 'User created!'
@@ -152,28 +187,39 @@ exports.postSignup = (req, res, next) => {
     });
 };
 
-/**
- * GET /accounts
- * Profile page.
+/** 
+ *  Account page
+ * @function getAccount
+ * @name /accounts
+ * @method GET
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
  */
 exports.getAccount = (req, res) => {
-    return res.status(200).json({
+    return res.status(200)
+        .json({
         title: 'My Account'
     });
 };
 
-/**
- * POST /accounts/profile
- * Update profile information.
+/** 
+ *  Update profile
+ * @function editAccount
+ * @name /accounts/profile
+ * @method PUT
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function 
  */
-exports.postUpdateProfile = (req, res, next) => {
+exports.editAccount = (req, res, next) => {
     req.assert('email', 'Please enter a valid email address.').isEmail();
     req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
   
     const errors = req.validationErrors();
   
     if (errors) {
-        return res.status(400).json({
+        return res.status(400)
+            .json({
             code: 400,
             status: 'error',
             message: errors,
@@ -184,13 +230,12 @@ exports.postUpdateProfile = (req, res, next) => {
         if (err) { return next(err); }
         user.email = req.body.email || '';
         user.profile.name = req.body.name || '';
-        user.profile.gender = req.body.gender || '';
-        user.profile.location = req.body.location || '';
-        user.profile.website = req.body.website || '';
+        user.profile.description = req.body.description || '';
         user.save((err) => {
             if (err) {
                 if (err.code === 11000) {
-                    return res.status(400).json({
+                    return res.status(400)
+                        .json({
                         code: 400,
                         status: 'error',
                         message: 'The email address you have entered is already associated with an account.',
@@ -198,7 +243,8 @@ exports.postUpdateProfile = (req, res, next) => {
                 }
                 return next(err);
             }
-            return res.status(200).json({
+            return res.status(200)
+                .json({
                 code: 200,
                 status: 'success',
                 message: 'Profile information has beeb updated!',
@@ -207,18 +253,24 @@ exports.postUpdateProfile = (req, res, next) => {
     });
 };
 
-/**
- * POST /accounts/password
- * Update current password.
+/** 
+ * Update current password
+ * @function editPassword
+ * @name /accounts/password
+ * @method PUT
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function 
  */
-exports.postUpdatePassword = (req, res, next) => {
+exports.editPassword = (req, res, next) => {
     req.assert('password', 'Password must be at least 4 characters long').len(4);
     req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
   
     const errors = req.validationErrors();
   
     if (errors) {
-        return res.status(400).json({
+        return res.status(400)
+            .json({
             code: 400,
             status: 'error',
             message: errors,
@@ -230,7 +282,8 @@ exports.postUpdatePassword = (req, res, next) => {
         user.password = req.body.password;
         user.save((err) => {
             if (err) { return next(err); }
-            return res.status(200).json({
+            return res.status(200)
+                .json({
                 code: 200,
                 status: 'success',
                 message: 'Password has been changed!',
@@ -239,15 +292,21 @@ exports.postUpdatePassword = (req, res, next) => {
     });
 };
   
-/**
- * POST /accounts/delete
- * Delete user account.
+/** 
+ * Delete user account
+ * @function deleteAccount
+ * @name /accounts/delete
+ * @method DELETE
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function 
  */
-exports.postDeleteAccount = (req, res, next) => {
+exports.deleteAccount = (req, res, next) => {
     User.remove({ _id: req.user.id }, (err) => {
         if (err) { return next(err); }
         req.logout();
-        return res.status(200).json({
+        return res.status(200)
+            .json({
             code: 200,
             status: 'success',
             message: 'Your account has been deleted!',
@@ -255,13 +314,19 @@ exports.postDeleteAccount = (req, res, next) => {
     });
 };
 
-/**
- * GET /reset/:token
- * Reset Password page.
+/** 
+ * Reset Password page
+ * @function getReset
+ * @name /reset/:token
+ * @method GET
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function 
  */
 exports.getReset = (req, res, next) => {
     if (req.isAuthenticated()) {
-        return res.status(400).json({
+        return res.status(400)
+            .json({
             code: 400,
             status: 'error',
             message: 'You are already logged in!',
@@ -272,22 +337,29 @@ exports.getReset = (req, res, next) => {
         .exec((err, user) => {
             if (err) { return next(err); }
             if (!user) {
-                return res.status(400).json({
+                return res.status(400)
+                    .json({
                     code: 400,
                     status: 'error',
                     message: 'Password reset token is invalid or has expired!',
                 });
             }
-            return res.status(200).json({
+            return res.status(200)
+                .json({
                 title: 'Password Reset'
             });
         }
     );
 };
-  
-/**
- * POST /reset/:token
- * Process the reset password request.
+
+/** 
+ * Process the reset password request
+ * @function postReset
+ * @name /reset/:token
+ * @method POST
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function 
  */
 exports.postReset = (req, res, next) => {
     req.assert('password', 'Password must be at least 4 characters long.').len(4);
@@ -296,7 +368,8 @@ exports.postReset = (req, res, next) => {
     const errors = req.validationErrors();
   
     if (errors) {
-        return res.status(400).json({
+        return res.status(400)
+            .json({
             code: 400,
             status: 'error',
             message: errors,
@@ -308,7 +381,8 @@ exports.postReset = (req, res, next) => {
             .where('passwordResetExpires').gt(Date.now())
             .then((user) => {
                 if (!user) {
-                    return res.status(400).json({
+                    return res.status(400)
+                        .json({
                         code: 400,
                         status: 'error',
                         message: 'Password reset token is invalid or has expired!',
@@ -343,7 +417,8 @@ exports.postReset = (req, res, next) => {
     resetPassword().then(sendResetPasswordEmail)
                    .then(() => { 
                        if (!res.finished) {
-                            return res.status(200).json({
+                            return res.status(200)
+                                .json({
                                 code: 200,
                                 status: 'success',
                                 message: 'Success! Your password has been changed.',
@@ -353,26 +428,37 @@ exports.postReset = (req, res, next) => {
                    .catch(err => next(err));
 };
   
-/**
- * GET /forgot
- * Forgot Password page.
+/** 
+ * Forgot Password page
+ * @function getForgot
+ * @name /forgot
+ * @method GET
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
  */
 exports.getForgot = (req, res) => {
     if (req.isAuthenticated()) {
-        return res.status(400).json({
+        return res.status(400)
+            .json({
             code: 400,
             status: 'error',
             message: 'You are already logged! If you want change your password edit your Account!',
         });
     }
-    return res.status(200).json({
+    return res.status(200)
+        .json({
         title: 'Forgot Password'
     });
 };
   
-/**
- * POST /forgot
- * Create a random token, then the send user an email with a reset link.
+/** 
+ * Create a random token, then send an email with a reset link
+ * @function postForgot
+ * @name /forgot
+ * @method POST
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function 
  */
 exports.postForgot = (req, res, next) => {
     req.assert('email', 'Please enter a valid email address.').isEmail();
@@ -381,7 +467,8 @@ exports.postForgot = (req, res, next) => {
     const errors = req.validationErrors();
   
     if (errors) {
-        return res.status(400).json({
+        return res.status(400)
+            .json({
             code: 400,
             status: 'error',
             message: errors,
@@ -395,7 +482,8 @@ exports.postForgot = (req, res, next) => {
         User.findOne({ email: req.body.email })
             .then((user) => {
                 if (!user) {
-                    return res.status(404).json({
+                    return res.status(404)
+                        .json({
                         code: 404,
                         status: 'error',
                         message: 'Accout with that email address does not exist!',
@@ -422,7 +510,8 @@ exports.postForgot = (req, res, next) => {
             If you did not request this, please ignore this email and your password will remain unchanged.\n`
         };
         return transporter.sendMail(mailOptions).then(() => {
-            return res.status(200).json({
+            return res.status(200)
+                .json({
                 code: 200,
                 status: 'success',
                 message: `An e-mail has been sent to ${user.email} with further instructions.`,
