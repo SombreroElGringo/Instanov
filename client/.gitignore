@@ -22,3 +22,5 @@ yarn-error.log*
 
 #compiled
 src/assets
+.sass-cache
+.gulp-scss-cache

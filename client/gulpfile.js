@@ -9,7 +9,7 @@ var newer        = require('gulp-newer');
 var notify       = require('gulp-notify');
 var plumber      = require('gulp-plumber');
 var reload       = browserSync.reload;
-var sass         = require('gulp-sass');
+var scss = require('gulp-scss');
 var sourcemaps   = require('gulp-sourcemaps');
 const { spawn, exec } = require('child_process');
 
@@ -26,7 +26,7 @@ var plumberOptions = {
 };
 
 // Compile Sass to CSS
-gulp.task('sass', function() {
+gulp.task('scss', function() {
     var autoprefixerOptions = {
         browsers: ['last 2 versions'],
     };
@@ -37,7 +37,7 @@ gulp.task('sass', function() {
         stream: true,
     };
 
-    var sassOptions = {
+    var scssOptions = {
         includePaths: [
 
         ]
@@ -46,7 +46,7 @@ gulp.task('sass', function() {
     return gulp.src('src/scss/App.scss')
         .pipe(plumber(plumberOptions))
         .pipe(sourcemaps.init())
-        .pipe(sass(sassOptions))
+        .pipe(scss(scssOptions))
         .pipe(autoprefixer(autoprefixerOptions))
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('src/assets/css'))
@@ -56,7 +56,7 @@ gulp.task('sass', function() {
 
 // Watch Sass files
 gulp.task('watch', function() {
-    gulp.watch('src/scss/App.scss', ['sass']);
+    gulp.watch('src/scss/App.scss', ['scss']);
 });
 
 // BrowserSync
@@ -76,5 +76,5 @@ gulp.task('launch', function() {
     exec('react-scripts start');
 });
 
-gulp.task('start', ['sass', 'watch', 'launch']);
+gulp.task('start', ['scss', 'watch', 'launch']);
 
