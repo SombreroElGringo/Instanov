@@ -5,11 +5,12 @@ import {Route, Redirect, BrowserRouter as Router} from 'react-router-dom';
 import './assets/css/App.css';
 import Sign from './components/account/sign';
 import Profile from './components/account/profile';
+import HttpError from "./components/HttpError";
 
 class App extends Component {
 	constructor(props) {
 		super(props);
-	
+
 		this.state = {
 		  isAuth: null,
 		}
@@ -22,7 +23,7 @@ class App extends Component {
 	}
 
 	render() {
-		
+
 		const {isAuth} = this.state;
 
 		return <Router>
@@ -58,6 +59,9 @@ class App extends Component {
 					</div>
 				)}/>
 
+                <Route component={() => (
+                    <HttpError error={{httpCode: "404"}} />
+                )}/>
 			</div>
 		</Router>;
 	}
