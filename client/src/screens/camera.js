@@ -61,26 +61,11 @@ export default class Camera extends React.Component {
 				this.video.play();
 				
 				let videoInput = this.video;
-				let clm = window.clm;
-				let ctracker = new clm.tracker();
-				let requestAnimFrame = window.requestAnimationFrame
+				let ctracker = new window.clm.tracker();
+				let requestAnimFrame = window.requestAnimationFrame;
 				ctracker.init();
 				ctracker.start(videoInput);
 				
-				function positionLoop() {
-					requestAnimFrame(positionLoop);
-					let positions = ctracker.getCurrentPosition();
-					// do something with the positions ...
-					// print the positions
-					let positionString = "";
-					if (positions) {
-						for (let p = 0; p < 10; p++) {
-							positionString += "featurepoint " + p + " : [" + positions[p][0].toFixed(2) + "," + positions[p][1].toFixed(2) + "]<br/>";
-						}
-					}
-				}
-				
-				positionLoop();
 				let canvasInput = this.canvas;
 				let cc = canvasInput.getContext('2d');
 				
@@ -90,7 +75,7 @@ export default class Camera extends React.Component {
 					ctracker.draw(canvasInput);
 				}
 				
-				drawLoop();
+				//drawLoop();
 				
 			}, err => {
 				console.log(err)
