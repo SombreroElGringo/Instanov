@@ -11,7 +11,7 @@ exports.index = (req, res, next) => {
 	res.json({
 		title: 'Add a new Story!'
 	});
-}
+};
 
 /**
  * POST /story
@@ -54,7 +54,7 @@ exports.createStory = (req, res, next) => {
     .catch(err => {
         return next(err);
     });
-}
+};
 
 /**
  * GET /story/:id
@@ -72,7 +72,7 @@ exports.getStoryById = (req, res, next) => {
 	.catch(err => {
 		return next(err);
 	});
-}
+};
 
 /**
  * PUT /story/:id
@@ -102,7 +102,7 @@ exports.editStoryById = (req, res, next) => {
                 }
             }
         }
-        console
+        console;
         
         if (!queryArgs) {
             let err = new Error('Bad request');
@@ -124,7 +124,7 @@ exports.editStoryById = (req, res, next) => {
     .catch(err => {
 		return next(err);
 	});
-}
+};
 
 /**
  * DELETE /story/:id
@@ -132,7 +132,7 @@ exports.editStoryById = (req, res, next) => {
  */
 exports.deleteStoryById = (req, res, next) => {
     
-    let id = req.params.id
+    let id = req.params.id;
     Story.findOne({_id: new ObjectId(id)}).then(story => {
 
         fs.unlink('./uploads/'+story.info.filename, err => {
@@ -154,4 +154,4 @@ exports.deleteStoryById = (req, res, next) => {
     .catch(err => {
 		return next(err);
 	});
-}
+};

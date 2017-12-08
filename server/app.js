@@ -42,8 +42,8 @@ app.use('/story/embed', express.static(__dirname + '/uploads'));
  * Error 404
  */
 app.use((req, res, next) => {
-    let err = new Error('Not Found')
-    err.status = 404
+    let err = new Error('Not Found');
+    err.status = 404;
     next(err)
 });
 /**
@@ -54,13 +54,13 @@ app.use((err, req, res, next) => {
     let data = {
         message: err.message,
         status: err.status || 500
-    }
+    };
 
     if(app.get('env') === 'development') {
        data.stack = err.stack
     }
 
-    res.status(data.status)
+    res.status(data.status);
     res.format({
         json: () => { res.send(data) }
     });

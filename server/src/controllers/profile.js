@@ -32,4 +32,4 @@ exports.index = (req, res, next) => {
 			message: `Not found!\n ${err}`,
 		});
 	});
-}
+};

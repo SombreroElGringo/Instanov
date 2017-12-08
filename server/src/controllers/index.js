@@ -28,4 +28,4 @@ exports.index = (req, res, next) => {
 			message: `Bad Request!\n ${err}`,
 		});
 	});
-}
+};

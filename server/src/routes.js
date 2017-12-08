@@ -67,7 +67,7 @@ module.exports = function(app, passport) {
 
 
     return app;
-}
+};
 
 /**
  *  Functions
