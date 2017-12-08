@@ -23,7 +23,7 @@ exports.isAuthAPI = (req, res, next) => {
 			errorManager.throwError('token or timestamp is not valid!', 400, next);
 		}
 	}
-}
+};
 
 /** 
  * Check if the token from the request is valid
@@ -37,7 +37,7 @@ exports.tokenIsValid = (token, next) => {
 		.update(process.env.HASH_KEY)
 		.digest('hex');
 	return apiToken === token ? true : errorManager.throwError('token is not valid!', 400, next);
-}
+};
 
 /** 
  * Check if the timestamp from the request is valid
@@ -52,4 +52,4 @@ exports.timestampIsValid = (timestamp, next) => {
 	} else {
 		errorManager.throwError('timestamp type is not valid!', 400, next)
 	}
-}
+};

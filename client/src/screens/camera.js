@@ -10,7 +10,7 @@ export default class Camera extends React.Component {
 	};
 	
 	render() {
-		return <div className={'camera'}>
+		return <div className={'camera animated fadeIn'}>
 			<div className={'header'}>
 				<Link to={"/"}>
 					<i className={"fa fa-arrow-left"}/>
