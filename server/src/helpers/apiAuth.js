@@ -1,11 +1,14 @@
 const crypto = require('crypto');
 const errorManager = require('./errorManager');
 
-/**
- * Middleware check if the token & timestamp is valid
+/** 
+ *  Middleware -> check if the token & timestamp is valid -> if valid give access to the API
+ * @function isAuthAPI
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function 
  */
-
-exports.middleware = (req, res, next) => {
+exports.isAuthAPI = (req, res, next) => {
 	return next();
 	
 	let token = req.query.token || req.headers['x-access-token'];
@@ -22,11 +25,13 @@ exports.middleware = (req, res, next) => {
 	}
 }
 
-/**
+/** 
  * Check if the token from the request is valid
- * apiToken = f34c5268b72404747c32e602a72b7bda25349ebba7a400e09d925613d7ec6c11
+ * apiToken = f34c5268b72404747c32e602a72b7bda25349ebba7a400e09d925613d7ec6c11	
+ * @function tokenIsValid
+ * @param {string} token - Token from the request
+ * @param {Function} next - Express next middleware function 
  */
-
 exports.tokenIsValid = (token, next) => {
 	let apiToken = crypto.createHmac('sha256', process.env.SECRET_KEY)
 		.update(process.env.HASH_KEY)
@@ -34,10 +39,12 @@ exports.tokenIsValid = (token, next) => {
 	return apiToken === token ? true : errorManager.throwError('token is not valid!', 400, next);
 }
 
-/**
+/** 
  * Check if the timestamp from the request is valid
+ * @function timestampIsValid
+ * @param {int} timestamp - Timestamp from the request
+ * @param {Function} next - Express next middleware function 
  */
-
 exports.timestampIsValid = (timestamp, next) => {
 	if (!isNaN(timestamp)) {
 		let difference = Math.floor(Date.now() / 1000) - timestamp;

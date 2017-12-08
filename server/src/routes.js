@@ -1,12 +1,12 @@
 /**
  * Module dependencies.
  */
-const crypto = require('crypto');
 const path = require('path');
-const auth = require('./helpers/apiAuth');
+const api = require('./helpers/apiAuth');
+const fileManager = require('./helpers/fileManager');
 const multer = require('multer');
 
-const upload = multer({ storage: getStorage() });
+const upload = multer({ storage: fileManager.getStorage() });
 
 /**
  * Controllers (route handlers).
@@ -61,45 +61,7 @@ module.exports = function(app, passport) {
     /**
      * API routes.
      */
-    app.get('/api/v1', auth.middleware, apiController.getApi);
+    app.get('/api/v1', api.isAuthAPI, apiController.getApi);
 
     return app;
-}
-
-
-/**
- *  Functions for multer
- */
-
-/** 
- * Get the storage
- * @function getStorage
- * @return {Data} storage - Storage
- */
-function getStorage() {
-    let storage = multer.diskStorage({
-        destination: (req, file, cb) => {
-            cb(null, 'uploads/');
-        },
-        filename: (req, file, cb) => {
-            let filename = crypto.createHmac('sha256', file.fieldname + '-' + Date.now())
-                                .update(process.env.HASH_KEY)
-                                .digest('hex');
-            cb(null, filename+ getExtension(file));
-        }
-    });
-    return storage;
-}
-
-/** 
- * Get the extension of a file
- * @function getExtension
- * @param {Data} file - File
- * @return {string} result - File's extension
- */
-function getExtension(file) {
-    let result = '';
-    if (file.mimetype === 'image/jpeg') result = '.jpg';
-    if (file.mimetype === 'image/png') result = '.png';
-    return result;
 }
