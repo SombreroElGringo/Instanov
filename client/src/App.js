@@ -6,6 +6,7 @@ import Sign from './components/account/sign';
 import Profile from './components/account/profile';
 import {Provider} from 'react-redux'
 import store from './store/index'
+import HttpError from "./components/HttpError";
 
 
 class App extends Component {
@@ -43,6 +44,9 @@ class App extends Component {
 						<Route exact
 						       path={"/sign"}
 						       component={() => <Sign type={'signup'}/>}/>
+                        <Route component={() => (
+                            <HttpError error={{httpCode: "404"}} />
+                        )}/>
 					</div>
 				</Router>
 			</Provider>;
