@@ -14,7 +14,7 @@ const userSchema = new  mongoose.Schema({
         name: String,
         username: { type: String, unique: true, lowercase: true },
         picture: String,
-        bibliography: String,
+        description: String,
     }
 }, { timestamps: true });
 

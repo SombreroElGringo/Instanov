@@ -43,7 +43,7 @@ module.exports = function(app, passport) {
     app.get('/accounts', passport.isAuthenticated, authController.getAccount);
     app.put('/accounts/profile', passport.isAuthenticated, authController.editAccount);
     app.put('/accounts/password', passport.isAuthenticated, authController.editPassword);
-    app.delete('/accounts/delete', passport.isAuthenticated, authController.deleteAccount);
+    app.delete('/accounts', passport.isAuthenticated, authController.deleteAccount);
 
     /**
      * Profiles routes

@@ -119,6 +119,7 @@ describe('controllers/auth.js', () => {
         });
     });
 
+
     describe('GET /accounts', () => {
        
         it('should return 400 Bad Request', (done) => {
@@ -127,23 +128,165 @@ describe('controllers/auth.js', () => {
             .expect(400, done);
         });
 
-        it('should return 400', (done) => {
-            request(app)
-            .post('/login')
-            .set('Accept','application/json')
+        it('should return 200', (done) => {
+            const agent = request.agent(app);
+
+            agent.post('/login')
             .send({
                 email: 'test.instanov@gmail.com',
-                password: 'success',
+               password: 'success',
             })
-            .end((err, res) => {
-                
-                request(app)
-                .get('/accounts')
-                done();
-            });
+            .end(() => {
+                agent.get('/accounts').expect(200, done);
+            })
         });
     });
 
 
+    describe('PUT /accounts/profile', () => {
+        
+        it('should return 400 Bad Request', (done) => {
+            request(app)
+            .put('/accounts/profile')
+            .expect(400, done);
+        });
+ 
+        it('should return 200', (done) => {
+            const agent = request.agent(app);
+ 
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'success',
+            })
+            .end(() => {
+                agent.put('/accounts/profile')
+                .send({
+                    email: 'test.instanov@gmail.com',
+                    name: 'Frank Test',
+                    description: 'Hello worl!',
+                })
+                .expect(200, done);
+            })
+        });
+    });
 
+
+    describe('PUT /accounts/password', () => {
+        
+        it('should return 400 Bad Request', (done) => {
+            request(app)
+            .put('/accounts/password')
+            .expect(400, done);
+        });
+ 
+        it('should return 200', (done) => {
+            const agent = request.agent(app);
+ 
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'success',
+            })
+            .end(() => {
+                agent.put('/accounts/password')
+                .send({
+                    password: 'supersuccess',
+                    confirmPassword: 'supersuccess',
+                })
+                .expect(200, done);
+            })
+        });
+    });
+
+
+    describe('DELETE /accounts', () => {
+        
+        it('should return 400 Bad Request', (done) => {
+            request(app)
+            .delete('/accounts')
+            .expect(400, done);
+        });
+ 
+        it('should return 200', (done) => {
+            const agent = request.agent(app);
+ 
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'success',
+            })
+            .end(() => {
+                agent.delete('/accounts')
+                .expect(200, done);
+            })
+        });
+    });
+
+
+    describe('GET /reset/:token', () => {
+        
+        it('should return 400 Bad Request', (done) => {
+            request(app)
+            .get('/reset/azerttyyfdfgd')
+            .expect(400, done);
+        });
+    });
+
+
+    describe('POST /reset/:token', () => {
+        
+        it('should return 400 Bad Request', (done) => {
+            request(app)
+            .post('/reset/azerttyyfdfgd')
+            .send({})
+            .expect(400, done);
+        });
+    });
+
+
+    describe('GET /forgot', () => {
+        
+        it('should return 200', (done) => {
+            request(app)
+            .get('/forgot')
+            .expect(200, done);
+        });
+
+        it('should return 400', (done) => {
+            const agent = request.agent(app);
+ 
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'success',
+            })
+            .end(() => {
+                agent.get('/forgot')
+                .expect(400, done);
+            })
+        });
+    });
+
+
+    describe('POST /forgot', () => {
+
+        it('should return 400', (done) => {
+            request(app)
+            .post('/forgot')
+            .send({
+                email: 'test.instanov',
+            })
+            .expect(400, done);
+        });
+        
+        it('should return 500', (done) => {
+            request(app)
+            .post('/forgot')
+            .send({
+                email: 'test.instanov@gmail.com',
+            })
+            .expect(500, done);
+        });
+    });
 });
