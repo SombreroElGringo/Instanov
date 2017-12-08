@@ -1,16 +1,22 @@
 const User = require('../models/User');
 const Story = require('../models/Story');
 
-/**
- * GET /
- * Home page.
+/** 
+ *  Get all the stories of the current user
+ * @function index
+ * @name /profiles/:username
+ * @method GET
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function 
  */
 exports.index = (req, res, next) => {
-    
-    
+	
+	const username = req.params.username;
+
     Promise.all([
-		User.find({'profile.username': req.params.username}),
-		Story.find({username: req.params.username}).sort('-date')
+		User.find({'profile.username': username}),
+		Story.find({username: username}).sort('-date')
 	])
 	.then(data => {
         const user = {...data[0][0]._doc};

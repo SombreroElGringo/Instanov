@@ -2,20 +2,17 @@ const Story = require('../models/Story');
 const ObjectId = require('mongodb').ObjectID;
 const path = require('path');
 const fs = require('fs');
+const _ = require('lodash');
 
-/**
- * GET /story
- * Form to add a story
- */
-exports.index = (req, res, next) => {
-	res.json({
-		title: 'Add a new Story!'
-	});
-};
 
-/**
- * POST /story
- * Add the story in the database
+/** 
+ *  Add a story in the database
+ * @function createStory
+ * @name /story
+ * @method POST
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function 
  */
 exports.createStory = (req, res, next) => { 
 
@@ -23,10 +20,11 @@ exports.createStory = (req, res, next) => {
     const errors = req.validationErrors();
     
     if (errors) {
-        return res.json({
+        return res.status(400)
+            .json({
             code: 400,
             status: 'error',
-            message: 'username cannot be empty!'
+            message: 'Username cannot be empty!'
         });
     }
     
@@ -34,7 +32,7 @@ exports.createStory = (req, res, next) => {
     let hashtag = str.length > 0 ? str.match(/(#[^\s#]+)/g) : null;
     let path = req.protocol + '://'+ req.get('host') + '/story/embed/' + req.file.filename; 
     
-    let story = new Story({
+    const story = new Story({
         username: req.body.username,
         info: {
             description: req.body.description,
@@ -45,7 +43,8 @@ exports.createStory = (req, res, next) => {
     });
 
     story.save().then(err => {
-        res.status(201).json({
+        return res.status(201)
+            .json({
             code: 201,
             status: 'success',
             message: 'Story created!'
@@ -54,15 +53,20 @@ exports.createStory = (req, res, next) => {
     .catch(err => {
         return next(err);
     });
-};
+}
 
-/**
- * GET /story/:id
- * Get a story by id
+/** 
+ *  Get a story by id
+ * @function getStoryById
+ * @name /story/:id
+ * @method GET
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function 
  */
 exports.getStoryById = (req, res, next) => {
     
-    let id = req.params.id;
+    const id = req.params.id;
 
    	Story.findOne({_id: new ObjectId(id)}).then(story => {
 		res.json({ 
@@ -70,17 +74,28 @@ exports.getStoryById = (req, res, next) => {
 		});
 	})
 	.catch(err => {
-		return next(err);
+		return res.status(404)
+            .json({
+            code: 404,
+            status: 'error',
+            message: 'Story not found!',
+        });
 	});
-};
+}
 
-/**
- * PUT /story/:id
- * Edit a story by id from the database
+/** 
+ *  Edit a story in the database
+ * @function editStoryById
+ * @name /story/:id
+ * @method PUT
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function 
  */
 exports.editStoryById = (req, res, next) => {
     
-    let id = req.params.id;
+    const id = req.params.id;
+
     Story.findOne({_id: new ObjectId(id)}).then(story => {
 
         const params = req.body;
@@ -102,7 +117,7 @@ exports.editStoryById = (req, res, next) => {
                 }
             }
         }
-        console;
+        console
         
         if (!queryArgs) {
             let err = new Error('Bad request');
@@ -114,7 +129,7 @@ exports.editStoryById = (req, res, next) => {
             res.json({
                 code: 200,
                 status: 'success',
-                message: 'Story edited'
+                message: 'Story edited',
             });
         })
         .catch(err => {
@@ -122,17 +137,28 @@ exports.editStoryById = (req, res, next) => {
         });
     })
     .catch(err => {
-		return next(err);
+		return res.status(404)
+            .json({
+            code: 404,
+            status: 'error',
+            message: 'Story not found!',
+        });
 	});
-};
+}
 
-/**
- * DELETE /story/:id
- * Delete a story by id from the database
+/** 
+ *  Delete a story in the database
+ * @function deleteStoryById
+ * @name /story/:id
+ * @method DELETE
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function 
  */
 exports.deleteStoryById = (req, res, next) => {
     
-    let id = req.params.id;
+    const id = req.params.id
+
     Story.findOne({_id: new ObjectId(id)}).then(story => {
 
         fs.unlink('./uploads/'+story.info.filename, err => {
@@ -144,7 +170,7 @@ exports.deleteStoryById = (req, res, next) => {
             res.json({
                 code: 200,
                 status: 'success',
-                message: 'Story deleted!'
+                message: 'Story deleted!',
             });
         })
         .catch(err => {
@@ -152,6 +178,54 @@ exports.deleteStoryById = (req, res, next) => {
         });
     })
     .catch(err => {
-		return next(err);
+		return res.status(404)
+            .json({
+            code: 404,
+            status: 'error',
+            message: 'Story not found!',
+        });
 	});
-};
+}
+
+/** 
+ *  Like or unlike a story if already liked
+ * @function editStoryById
+ * @name /story/:id/like/:username
+ * @method PUT
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function 
+ */
+exports.likeStoryById = (req, res, next) => {
+    
+    const id = req.params.id;
+    const username = req.params.username;
+
+    Story.findOne({_id: new ObjectId(id)})
+        .then(story => {
+           
+            const action = _.indexOf(story.likes, username) === -1 ? {$push: {likes: username}} : {$pull: {likes: username}};
+            const action_type = _.indexOf(story.likes, username) === -1 ? 'liked' : 'unliked';
+
+            Story.update({_id: new ObjectId(id)}, action)
+                .exec()
+                .then(err => {
+                res.json({
+                    code: 200,
+                    status: 'success',
+                    message: `Story ${action_type}!`,
+                });
+            })
+            .catch(err => {
+                return next(err);
+            });
+    })
+    .catch(err =>{
+        return res.status(404)
+            .json({
+            code: 404,
+            status: 'error',
+            message: 'Story not found!',
+        });
+    });
+}
