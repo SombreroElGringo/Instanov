@@ -139,11 +139,8 @@ describe('controllers/auth.js', () => {
                 
                 request(app)
                 .get('/accounts')
-                .expect(400, done);
                 done();
             });
-
-            
         });
     });
 
