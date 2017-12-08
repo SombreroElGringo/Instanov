@@ -24,6 +24,7 @@ class Sign extends Component {
         let newType = this.state.type === 'signup' ? 'signin' : 'signup';
         this.setState({
             type: newType,
+            errors: []
         });
     }
 
@@ -65,7 +66,7 @@ class Sign extends Component {
                 // Error handling
                 if (response.code === 400) {
                     this.setState({
-                        errors: response.message
+                        errors: response.message || []
                     });
                 } else {
                     this.setState({
