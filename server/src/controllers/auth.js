@@ -47,7 +47,7 @@ exports.postLogin = (req, res, next) => {
             .json({
             code: 400,
             status: 'error',
-            message: errors.msg,
+            message: errors,
         });
     }
     

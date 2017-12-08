@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../../app.js');
+const app = require('../../../app.js');
 
 const token = 'f34c5268b72404747c32e602a72b7bda25349ebba7a400e09d925613d7ec6c11';
 const timestamp = Math.floor(Date.now() / 1000);

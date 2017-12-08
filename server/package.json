@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "A project web application, who look like Instagram!",
   "scripts": {
-    "test": "mocha ./test/**/*.test.js",
+    "test": "mocha tests --recursive --opts ./tests/mocha.opts",
+    "nyc_test": "nyc report mocha tests/**/*.js",
     "start": "nodemon ./app.js",
     "cover": "istanbul cover _mocha ./test/**/*.test.js --report lcovonly -- -R spec && codecov -t b569feb9-ed70-4838-9772-6b2cc1bdfeee"
   },

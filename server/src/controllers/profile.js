@@ -2,7 +2,7 @@ const User = require('../models/User');
 const Story = require('../models/Story');
 
 /** 
- *  Get all the stories of the current user
+ *  Get all stories of the current user
  * @function index
  * @name /profiles/:username
  * @method GET
@@ -37,5 +37,27 @@ exports.index = (req, res, next) => {
 			status: 'error',
 			message: `Not found!\n ${err}`,
 		});
+	});
+};
+
+/** 
+ *  Get current user
+ * @function currentUser
+ * @name /profiles/current/session
+ * @method GET
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function 
+ */
+exports.currentUser = (req, res, next) => {
+	const user = res.locals.user;
+	
+	res.json({ 
+		user: {
+			_id: user._id,
+            username: user.profile.username,
+            name: user.profile.name || '',
+            description: user.profile.description || '',
+		},	
 	});
 };

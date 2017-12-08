@@ -242,5 +242,5 @@ $RECYCLE.BIN/
 server/uploads/
 
 \.idea/
-
+.vscode
 package-lock.json
