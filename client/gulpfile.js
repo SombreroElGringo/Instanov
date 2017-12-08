@@ -1,8 +1,6 @@
 var gulp = require('gulp');
-var notify = require('gulp-notify');
-var plumber = require('gulp-plumber');
 var sass = require('gulp-sass');
-const {spawn, exec} = require('child_process');
+const {exec} = require('child_process');
 
 
 // Compile Sass to CSS
@@ -19,7 +17,7 @@ gulp.task('watch', function () {
     gulp.watch('src/scss/App.scss', ['scss']);
 });
 
-//Lauch React app
+//Launch React app
 gulp.task('launch', function () {
     exec('react-scripts start');
 });

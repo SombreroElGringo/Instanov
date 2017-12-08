@@ -75,14 +75,19 @@ mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_DOCKER || process.env.MONGODB_URI || process.env.MONGOLAB_URI, options)
         .then(() => {
             console.log('%s Connection has been established successfully with the database', chalk.green('✓'));
+            /**
+             * Running server
+             */
             app.listen(app.get('port'), () => {
                 console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
                 console.log('-- Press CTRL-C to stop --\n');
         });
 })    
 .catch(err => {
-    console.error('%s MongoDB connection error. Please make sure MongoDB is running: %s', chalk.red('✗'), err);
+    console.error(Object.assign({},err, {
+        message: `${err.message}\n
+        ${chalk.red('✗')} MongoDB connection error. Please make sure MongoDB is running.`
+    }));
 });
-
 
 module.exports = app;

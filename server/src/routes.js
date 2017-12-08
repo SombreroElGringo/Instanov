@@ -49,6 +49,7 @@ module.exports = function(app, passport) {
      * Profiles routes
      */
     app.get('/profiles/:username', passport.isAuthenticated, profileController.index);
+    app.get('/profiles/current/session', passport.isAuthenticated, profileController.currentUser);
 
     /**
      * Story routes
