@@ -1,51 +1,31 @@
 import React from 'react'
 import {Post} from './'
 import moment from 'moment'
-import Spinner from 'react-spinkit'
+import getPosts from "../store/selectors/get_posts";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import {fetchPosts} from "../store/actions/posts";
+import Loader from './loader'
 
-const Loader = () => <div style={{width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center"}}>
-	<Spinner name={"three-bounce"} noFadeIn={true}/>
-</div>;
 
-const API_URL = process.env.REACT_APP_PROD_API_URL || process.env.REACT_APP_DEV_API_URL;
-
-export default class Content extends React.Component {
-	state = {
-		posts: null
-	};
-	
-	async fetchPosts() {
-		const url = API_URL + '/';
-		try {
-			const res = await fetch(url, {
-				credentials: 'include',
-			});
-			const json = await res.json();
-			setTimeout(() => {
-				this.setState({
-					posts: json.stories,
-				});
-			}, 3000)
-		} catch (e) {
-			this.setState({
-				posts: [],
-			});
-		}
-	}
+class Content extends React.Component {
 	
 	componentDidMount() {
-		this.fetchPosts().catch(e => console.log(e));
+		const {fetchPosts} = this.props;
+		fetchPosts();
 	}
 	
 	render() {
-		if (!this.state.posts)
-			return <Loader />;
+		const {posts} = this.props;
 		
-		if (this.state.posts.length < 1)
+		if (!posts)
+			return <Loader/>;
+		
+		if (posts.length < 1)
 			return <h3 className={'text-center'}>Aucun contenu</h3>;
 		
 		return <div className={'news-content'}>
-			{this.state.posts && this.state.posts.map(post => {
+			{posts && posts.map(post => {
 				const newPost = {
 					name: post.username,
 					image: "https://unsplash.it/32",
@@ -60,3 +40,8 @@ export default class Content extends React.Component {
 		</div>
 	}
 }
+
+const mapStateToProps = state => ({posts: getPosts(state)});
+const mapDispatchToProps = dispatch => bindActionCreators({fetchPosts}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Content);

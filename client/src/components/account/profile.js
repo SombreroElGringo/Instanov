@@ -1,60 +1,25 @@
 import React, {Component} from 'react';
 import Thumbnail from '../thumbnail';
+import {connect} from "react-redux";
+import getUserInfo from "../../store/selectors/get_user_info";
+import getUserPosts from "../../store/selectors/get_user_posts";
+import {bindActionCreators} from "redux";
+import {fetchUserPosts} from "../../store/actions/posts";
+import {checkUser} from "../../store/actions/auth";
+import Loader from "../loader";
 
-const API_URL = process.env.REACT_APP_PROD_API_URL || process.env.REACT_APP_DEV_API_URL;
-
-export default class Profile extends Component {
-	constructor(props) {
-		super(props);
-		
-		this.state = {
-			user: {
-				_id: null,
-				username: null,
-				name: null,
-				description: null,
-			},
-			posts: null,
-		};
-	}
-	
-	async fetchPosts() {
-		const username = "demorite";
-		console.log(this);
-		const url = `${API_URL}/profiles/${username}`;
-		console.log(url);
-		try {
-			const res = await fetch(url, {
-				credentials: 'include',
-			});
-			const json = await res.json();
-			console.log(json.stories);
-			this.setState({
-				user: {
-					_id: json.user._id,
-					username: json.user.username,
-					name: json.user.name,
-					description: json.user.description,
-				},
-				posts: json.stories,
-			});
-		} catch (e) {
-			this.setState({
-				user: {},
-				posts: [],
-			});
-		}
-	}
-	
+class Profile extends Component {
 	componentDidMount() {
-		this.fetchPosts().catch(e => console.log(e));
+		const {user, checkUser, fetchUserPosts} = this.props;
+		if(!user) checkUser().then(user => fetchUserPosts(user.username));
+		if(user) fetchUserPosts(user.username)
 	}
 	
 	render() {
 		
-		const {user, posts} = this.state;
-		return user ? <img src={"https://http.cat/403"}
-		                   style={{width: "100%"}}/> : (
+		const {user, posts} = this.props;
+		
+		return !user ? <Loader/> : (
 			<div>
 				<section className={'fs-fafafa'}>
 					<div>
@@ -78,7 +43,7 @@ export default class Profile extends Component {
 									posts.lenght < 1 ? (<h3 className={'text-center'}>Aucun contenu</h3>) : (
 										
 										<div className={'_usr_stories'}>
-											{this.state.posts && this.state.posts.map(post => {
+											{posts && posts.map(post => {
 												const newThumbnail = {
 													featured: post.info.path,
 												};
@@ -98,3 +63,8 @@ export default class Profile extends Component {
 		);
 	}
 }
+
+const mapStateToProps = (state) => ({user: getUserInfo(state), posts: getUserPosts(state)});
+const mapDispatchToProps = (dispatch) => bindActionCreators({fetchUserPosts, checkUser}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile)

@@ -3,7 +3,6 @@ import React, {Component} from "react";
 export default class Thumbnail extends Component{
 	render(){
 		const {
-			image,
 			featured,
 		} = this.props.post;
 

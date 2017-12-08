@@ -26,6 +26,7 @@ export default class Camera extends React.Component {
 				     onClick={() => this.captureImage()}/>
 			</div>
 			<img className={"thumbnail"}
+			     alt={"thumbnail's place"}
 			     ref={ref => this.thumbnail = ref}
 			     src={"https://unsplash.it/1080/1520"}
 			     onClick={() => this.dismissThumbnail()}/>
@@ -62,18 +63,18 @@ export default class Camera extends React.Component {
 				
 				let videoInput = this.video;
 				let ctracker = new window.clm.tracker();
-				let requestAnimFrame = window.requestAnimationFrame;
+				//let requestAnimFrame = window.requestAnimationFrame;
 				ctracker.init();
 				ctracker.start(videoInput);
 				
-				let canvasInput = this.canvas;
-				let cc = canvasInput.getContext('2d');
+				//let canvasInput = this.canvas;
+				//let cc = canvasInput.getContext('2d');
 				
-				function drawLoop() {
+				/*function drawLoop() {
 					requestAnimFrame(drawLoop);
 					cc.clearRect(0, 0, canvasInput.width, canvasInput.height);
 					ctracker.draw(canvasInput);
-				}
+				}*/
 				
 				//drawLoop();
 				

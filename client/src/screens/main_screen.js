@@ -1,8 +1,5 @@
 import React from 'react';
 import {Header, News, Content} from '../components';
-import {bindActionCreators} from "redux";
-import {handle_auth} from "../store/auth";
-import {connect} from "react-redux";
 
 class MainScreen extends React.Component{
 	
@@ -18,8 +15,5 @@ class MainScreen extends React.Component{
 		</div>
 	}
 }
-
-
-
 
 export default MainScreen

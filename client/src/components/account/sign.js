@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
 import {bindActionCreators} from "redux";
-import {handle_auth} from "../../store/auth";
+import {handle_auth} from "../../store/actions/auth";
 import {connect} from "react-redux";
+import getIsAuth from "../../store/selectors/get_is_auth";
 
 const API_URL = process.env.REACT_APP_PROD_API_URL || process.env.REACT_APP_DEV_API_URL;
 
@@ -13,7 +14,6 @@ class Sign extends Component {
 		
 		this.state = {
 			type: this.props.type || 'signin',
-			isAuth: this.props.isAuth || null,
 		}
 	}
 	
@@ -195,7 +195,7 @@ class Sign extends Component {
 	}
 }
 
-const mapStateToProps = ({auth}) => ({isAuth: auth.isAuth});
+const mapStateToProps = (state) => ({isAuth: getIsAuth(state)});
 const mapDispatchToProps = (dispatch) => bindActionCreators({handleAuth: handle_auth}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sign)

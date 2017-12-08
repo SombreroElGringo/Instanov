@@ -60,3 +60,5 @@ typings/
 # Visual Code and PHPStorm
 .idea
 .vscode
+
+client/package-lock.json

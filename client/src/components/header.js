@@ -2,7 +2,8 @@ import React from 'react'
 import {Link} from "react-router-dom";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import {logout} from '../store/auth'
+import {logout} from '../store/actions/auth'
+import getIsAuth from "../store/selectors/get_is_auth";
 
 class Header extends React.Component {
 	render() {
@@ -30,6 +31,6 @@ class Header extends React.Component {
 }
 
 export default connect(
-	({auth}) => ({isAuth: auth.isAuth}),
-	(dispatch) => bindActionCreators({logout: () => logout(dispatch)}, dispatch)
+	(state) => ({isAuth: getIsAuth(state)}),
+	(dispatch) => bindActionCreators({logout}, dispatch)
 )(Header);
