@@ -44,11 +44,18 @@ describe('controllers/index.js', () => {
         });
     });
 
-    describe('GET /random-url', () => {
+    describe('GET /', () => {
         it('should return 404 Not Found', (done) => {
-            request(app)
-            .get('/random-url')
-            .expect(404, done);
+            const agent = request.agent(app);
+            
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'success',
+            })
+            .end(() => {
+                agent.get('/').expect(200, done);
+            });
         });
     });
 });

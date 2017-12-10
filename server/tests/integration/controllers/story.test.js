@@ -21,11 +21,83 @@ describe('controllers/story.js', () => {
         }).exec();
     });
 
+
     describe('POST /story', () => {
         it('should return 400 Bad Login', (done) => {
             request(app)
-            .get('/profiles/username_not_in_the_db')
+            .post('/story')
             .expect(400, done);
+        });
+
+        it('should return 400', (done) => {
+            
+            const agent = request.agent(app);
+            
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'success',
+            })
+            .end(() => {
+                agent.post('/story')
+                .attach('story', `${__dirname}/../../images/test.jpeg`)
+                .expect(400, done);
+            });
+        });
+
+        it('should return 201', (done) => {
+            
+            const agent = request.agent(app);
+            
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'success',
+            })
+            .end(() => {
+                agent.post('/story')
+                .field('username', 'test_instanov')
+                .field('hastag', '#japan #ryokan')
+                .field('desrcription', 'japan test')
+                .attach('story', `${__dirname}/../../images/test.jpeg`)
+                .expect(201, done);
+            });
+        });
+    });
+
+
+    describe('GET /story/embed/:filename', () => {
+        it('should return 400', (done) => {
+            
+            const agent = request.agent(app);
+            
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'failed',
+            })
+            .end(() => {
+                Story.findOne({username: 'test_instanov'}).then(story => {
+                    agent.get(`/story/embed/${story.info.filename}`)
+                    .expect(400, done); 
+                })
+                .catch(done);
+            });
+        });
+
+        it('should return 404', (done) => {
+            
+            const agent = request.agent(app);
+            
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'success',
+            })
+            .end(() => {
+                agent.get('/story/embed/qjdsnqjsndjnsdjqndjsqndj.jpg')
+                .expect(404, done);
+            });
         });
 
         it('should return 200', (done) => {
@@ -38,24 +110,189 @@ describe('controllers/story.js', () => {
                 password: 'success',
             })
             .end(() => {
-                agent.get('/profiles/test_instanov').expect(200, done);
+                Story.findOne({username: 'test_instanov'}).then(story => {
+                    agent.get(`/story/embed/${story.info.filename}`)
+                    .expect(200, done); 
+                })
+                .catch(done);
+            });
+        }); 
+    });
+
+
+    describe('PUT /story/:id', () => {
+        it('should return 400', (done) => {
+            
+            const agent = request.agent(app);
+            
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'failed',
+            })
+            .end(() => {
+                Story.findOne({username: 'test_instanov'}).then(story => {
+                    agent.put(`/story/${story._id}`)
+                    .send({
+                        description: 'New description',
+                        hastag: '#new #test#edit',
+                    })
+                    .expect(400, done); 
+                })
+                .catch(done);
+            });
+        });
+
+        it('should return 500', (done) => {
+            
+            const agent = request.agent(app);
+            
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'success',
+            })
+            .end(() => {
+                agent.put(`/story/dqhszghaqduhauzidnauqdni12`)
+                .send({
+                    description: 'New description',
+                    hastag: '#new #test#edit',
+                })
+                .expect(500, done);
+            });
+        });
+
+        it('should return 200', (done) => {
+            
+            const agent = request.agent(app);
+            
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'success',
+            })
+            .end(() => {
+                Story.findOne({username: 'test_instanov'}).then(story => {
+                    agent.put(`/story/${story._id}`)
+                    .send({
+                        description: 'New description',
+                        hastag: '#new #test#edit',
+                    })
+                    .expect(200, done); 
+                })
+                .catch(done);
             });
         });
     });
 
-    describe('GET /story/:id', () => {
-        
+
+    describe('PUT /story/:id/like/:username', () => {
+        it('should return 400', (done) => {
+            
+            const agent = request.agent(app);
+            
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'failed',
+            })
+            .end(() => {
+                Story.findOne({username: 'test_instanov'}).then(story => {
+                    agent.put(`/story/${story._id}/like/test_instanov`)
+                    .expect(400, done); 
+                })
+                .catch(done);
+            });
+        });
+
+        it('should return 500', (done) => {
+            
+            const agent = request.agent(app);
+            
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'success',
+            })
+            .end(() => {
+                agent.put(`/story/dqhszghaqduhauzidnauqdni12/like/123`)
+                .expect(500, done);
+            });
+        });
+
+        it('should return 200', (done) => {
+            
+            const agent = request.agent(app);
+            
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'success',
+            })
+            .end(() => {
+                Story.findOne({username: 'test_instanov'}).then(story => {
+                    agent.put(`/story/${story._id}/like/test_instanov`)
+                    .expect(200, done); 
+                })
+                .catch(done);
+            });
+        });
     });
 
-    describe('PUT /story/:id', () => {
-        
-    });
 
     describe('DELETE /story/:id', () => {
-        
-    });
+        it('should return 400', (done) => {
+            
+            const agent = request.agent(app);
+            
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'failed',
+            })
+            .end(() => {
+                Story.findOne({username: 'test_instanov'}).then(story => {
+                    agent.delete(`/story/${story._id}`)
+                    .expect(400, done); 
+                })
+                .catch(done);
+            });
+        });
 
-    describe('DELETE /story/:id/like/:username', () => {
-        
+        it('should return 500', (done) => {
+            
+            const agent = request.agent(app);
+            
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'success',
+            })
+            .end(() => {
+                agent.delete(`/story/dqhszghaqduhauzidnauqdni12`)
+                .expect(500, done);
+            });
+        });
+
+        it('should return 200', (done) => {
+            
+            const agent = request.agent(app);
+            
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'success',
+            })
+            .end(() => {
+                Story.findOne({username: 'test_instanov'}).then(story => {
+                    agent.delete(`/story/${story._id}`)
+                    .expect(200, done); 
+                })
+                .catch(done);
+            });
+        });
+
+
+        Story.remove({username: 'test_instanov'}).exec();
     });
 });

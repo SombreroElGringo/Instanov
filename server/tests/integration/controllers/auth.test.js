@@ -57,6 +57,16 @@ describe('controllers/auth.js', () => {
             })
             .expect(404, done);
         });
+
+        it('should return 404', (done) => {
+            request(app)
+            .post('/login')
+            .send({
+                email: 'test.fail@gmail.com',
+                password: 'failed',
+            })
+            .expect(404, done);
+        });
     });
 
 
