@@ -1,0 +1,69 @@
+._h_profile {
+  .status_bar {
+    border-bottom: 1px solid lightgray;
+    box-shadow: 0 2px 10px -6px black;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    i {  padding: 0 10px;  }
+  }
+  .infos {
+    .thumb_and_stats {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px;
+      .thumbnail {
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
+        background-size: cover;
+        background-position: center;
+      }
+      .stats_and_button {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 10px;
+        .stats {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0 10px 10px;
+          & > div{
+            flex: 1;
+            text-align: center;
+            :first-child{
+              font-size: 1.5em;
+              font-weight: bold;
+              padding-bottom: 5px;
+            }
+            :last-child{  color: gray;  }
+          }
+        }
+        .button{
+          text-align: center;
+          border: 1px solid lightgray;
+          border-radius: 3px;
+          padding: 5px;
+          cursor: pointer;
+        }
+      }
+    }
+    .description{
+      padding: 20px;
+      font-size: 0.9rem;
+      .name{  font-weight: bold;  }
+      .text{  padding: 10px 0 0 0;  }
+    }
+  }
+  .filter_icons{
+    border-top: 1px solid lightgray;
+    display: flex;
+    justify-content: space-around;
+    padding: 15px;
+    font-size: 1.8rem;
+    color: gray;
+  }
+}

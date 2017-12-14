@@ -2,13 +2,18 @@ import React from 'react'
 import {Link} from "react-router-dom";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import {logout} from '../store/actions/auth'
+import {checkUser, logout} from '../store/actions/auth'
 import getIsAuth from "../store/selectors/get_is_auth";
+import getUserInfo from "../store/selectors/get_user_info";
 
 class Header extends React.Component {
+	componentDidMount(){
+		this.props.checkUser();
+	}
+	
 	render() {
-		const {isAuth, logout} = this.props;
-		
+		const {isAuth, logout, user} = this.props;
+		const {username} = user || {};
 		
 		return <header>
 			<nav>
@@ -23,6 +28,11 @@ class Header extends React.Component {
 								<i className={'fa fa-send'}/>
 							</Link>
 						}
+						{
+							username && <Link to={`/profiles/${username}`}>
+								<i className={'fa fa-user'}/>
+							</Link>
+						}
 					</li>
 				</ul>
 			</nav>
@@ -31,6 +41,6 @@ class Header extends React.Component {
 }
 
 export default connect(
-	(state) => ({isAuth: getIsAuth(state)}),
-	(dispatch) => bindActionCreators({logout}, dispatch)
+	(state) => ({isAuth: getIsAuth(state), user: getUserInfo(state)}),
+	(dispatch) => bindActionCreators({logout, checkUser}, dispatch)
 )(Header);

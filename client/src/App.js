@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Camera, MainScreen} from './screens';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {Camera, MainScreen, SinglePost} from './screens';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import './assets/css/App.css';
 import Sign from './components/account/sign';
 import Profile from './components/account/profile';
@@ -23,19 +23,22 @@ class App extends Component {
 			})
 			.catch(err => {
 				console.log(err);
-				if(window.location.pathname !== "/sign")
+				if (window.location.pathname !== "/sign")
 					window.location.href = "/sign";
 			});
 		
 	}
 	
 	render() {
-			return <Provider store={store}>
-				<Router>
-					<div>
+		return <Provider store={store}>
+			<Router>
+					<Switch>
 						<Route exact
 						       path={"/"}
 						       component={MainScreen}/>
+						<Route exact
+						        path={"/posts/:id"}
+						        component={SinglePost}/>
 						<Route exact
 						       path={"/camera"}
 						       component={Camera}/>
@@ -45,12 +48,13 @@ class App extends Component {
 						<Route exact
 						       path={"/sign"}
 						       component={() => <Sign type={'signup'}/>}/>
-                        <Route component={() => (
-                            <HttpError error={{httpCode: "404"}} />
-                        )}/>
-					</div>
-				</Router>
-			</Provider>;
+						<Route component={() => {
+							console.log(404);
+							return <HttpError error={{httpCode: "404"}}/>
+						}}/>
+					</Switch>
+			</Router>
+		</Provider>;
 	}
 }
 

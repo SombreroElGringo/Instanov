@@ -1,5 +1,5 @@
 import {Map} from 'immutable'
-import {FETCH_POST_SUCCESS, FETCH_USER_POSTS_SUCCESS} from "../actions/consts";
+import {FETCH_POSTS_SUCCESS, FETCH_USER_POSTS_SUCCESS} from "../actions/consts";
 
 const initialState = Map({
 	posts: [],
@@ -7,7 +7,7 @@ const initialState = Map({
 });
 
 const handlers = {
-	[FETCH_POST_SUCCESS] : (state, action) => state.set('posts', action.payload),
+	[FETCH_POSTS_SUCCESS] : (state, action) => state.set('posts', action.payload),
 	[FETCH_USER_POSTS_SUCCESS] : (state, action) => state.set('user_posts', action.payload)
 };
 
