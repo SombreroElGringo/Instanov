@@ -43,7 +43,7 @@ module.exports = function(app, passport) {
     app.get('/accounts', passport.isAuthenticated, authController.getAccount);
     app.put('/accounts/profile', passport.isAuthenticated, authController.editAccount);
     app.put('/accounts/password', passport.isAuthenticated, authController.editPassword);
-    app.delete('/accounts/delete', passport.isAuthenticated, authController.deleteAccount);
+    app.delete('/accounts', passport.isAuthenticated, authController.deleteAccount);
 
     /**
      * Profiles routes
@@ -54,10 +54,10 @@ module.exports = function(app, passport) {
     /**
      * Story routes
      */
-    app.post('/story', upload.single('story'), storyController.createStory);
-    app.put('/story/:id', storyController.editStoryById);
-    app.delete('/story/:id', storyController.deleteStoryById);
-    app.put('/story/:id/like/:username', storyController.likeStoryById);
+    app.post('/story', upload.single('story'), passport.isAuthenticated, storyController.createStory);
+    app.put('/story/:id', passport.isAuthenticated, storyController.editStoryById);
+    app.delete('/story/:id', passport.isAuthenticated, storyController.deleteStoryById);
+    app.put('/story/:id/like/:username', passport.isAuthenticated, storyController.likeStoryById);
 
     /**
      * API routes.
