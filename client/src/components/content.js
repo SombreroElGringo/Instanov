@@ -27,11 +27,12 @@ class Content extends React.Component {
 		return <div className={'news-content'}>
 			{posts && posts.map(post => {
 				const newPost = {
+					id: post._id,
 					name: post.username,
 					image: "https://unsplash.it/32",
 					featured: post.info.path,
 					description: post.info.description,
-					date: moment(post.updatedAt),
+					date: moment(post.createdAt),
 					likes: post.likes
 				};
 				return <Post post={newPost}

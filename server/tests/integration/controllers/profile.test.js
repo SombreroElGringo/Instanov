@@ -2,7 +2,7 @@ const request = require('supertest');
 const app = require('../../../app.js');
 const User = require('../../../src/models/User');
 
-describe('controllers/index.js', () => {
+describe('controllers/profile.js', () => {
     beforeEach("Add user", async () => {
         await User.create({
             email: 'test.instanov@gmail.com',
@@ -20,17 +20,15 @@ describe('controllers/index.js', () => {
         }).exec();
     });
 
-    describe('GET /', () => {
+    describe('GET /profiles/:username', () => {
         it('should return 400 Bad Login', (done) => {
             request(app)
-            .get('/')
+            .get('/profiles/username_not_in_the_db')
             .expect(400, done);
         });
-    });
 
-    describe('GET /', () => {
-        it('should return 200 & a object', (done) => {
-
+        it('should return 200', (done) => {
+            
             const agent = request.agent(app);
             
             agent.post('/login')
@@ -39,13 +37,20 @@ describe('controllers/index.js', () => {
                 password: 'success',
             })
             .end(() => {
-                agent.get('/').expect(200, done);
+                agent.get('/profiles/test_instanov').expect(200, done);
             });
         });
     });
 
-    describe('GET /', () => {
-        it('should return 404 Not Found', (done) => {
+    describe('GET /profiles/current/session', () => {
+        it('should return 400 Bad Login', (done) => {
+            request(app)
+            .get('/profiles/current/session')
+            .expect(400, done);
+        });
+
+        it('should return 200', (done) => {
+            
             const agent = request.agent(app);
             
             agent.post('/login')
@@ -54,7 +59,7 @@ describe('controllers/index.js', () => {
                 password: 'success',
             })
             .end(() => {
-                agent.get('/').expect(200, done);
+                agent.get('/profiles/current/session').expect(200, done);
             });
         });
     });

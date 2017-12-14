@@ -5,6 +5,12 @@
     margin: 0 auto;
     background-color: white;
     .post {
+      .post-header{
+        img{
+          width: 32px;
+          height: 32px;
+        }
+      }
       &:not(:last-child) {
         border-bottom: 1px solid lightgray;
         padding-bottom: 10px;

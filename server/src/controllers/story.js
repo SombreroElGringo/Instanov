@@ -98,6 +98,15 @@ exports.editStoryById = (req, res, next) => {
 
     Story.findOne({_id: new ObjectId(id)}).then(story => {
 
+        if(!story) {
+            return res.status(404)
+                .json({
+                code: 404,
+                status: 'error',
+                message: 'Story not found!',
+            });
+        }
+
         const params = req.body;
         const POSSIBLE_KEYS = ['description', 'hashtag'];
         
@@ -117,7 +126,6 @@ exports.editStoryById = (req, res, next) => {
                 }
             }
         }
-        console
         
         if (!queryArgs) {
             let err = new Error('Bad request');
@@ -158,10 +166,11 @@ exports.editStoryById = (req, res, next) => {
 exports.deleteStoryById = (req, res, next) => {
     
     const id = req.params.id
+    const uploadsPath = __dirname+'/../../uploads/';
 
     Story.findOne({_id: new ObjectId(id)}).then(story => {
 
-        fs.unlink('./uploads/'+story.info.filename, err => {
+        fs.unlink(uploadsPath+story.info.filename, err => {
             if (err) { console.error('Error: ', err);}
             console.log(`Story deleted ${story.info.filename}`);
         });

@@ -1,4 +1,4 @@
-body {  overflow: hidden;  }
+//body {  overflow: hidden;  }
 
 @for $i from 1 through 5 {
   .p-#{$i} {  padding: #{$i}0px;  }
@@ -31,3 +31,4 @@ body {  overflow: hidden;  }
 img {  background-image: url("https://placehold.it/64x64/aaa/aaa");  }
 
 .invisible {  position: absolute;  z-index: 10;  visibility: hidden;  }
+.link{color: black; text-decoration: none; cursor: pointer}

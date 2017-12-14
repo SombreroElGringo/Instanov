@@ -7,12 +7,17 @@ export const fetchPost = (id) => {
 		dispatch({type: FETCH_POST});
 		
 		try{
-			const response = await fetch(`${API_URL}/story/${id}`);
+			const url = `${API_URL}/story/${id}`;
+			const options = {credentials: "include"};
+			
+			const response = await fetch(url, options);
 			if(!response.ok) throw new Error("An error occured");
-			const json = await response.json();
+			const story = (await response.json()).story;
+			const payload = story._id;
+			
 			dispatch({
 				type: FETCH_POST_SUCCESS,
-				payload: json
+				payload
 			})
 		}catch(err){
 			dispatch({

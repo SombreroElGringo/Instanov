@@ -13,5 +13,5 @@ const middlewares = [
 export default createStore(combineReducers({
 	auth,
 	posts,
-	currentpost
+	currentpost,
 }), applyMiddleware(...middlewares))

@@ -2,9 +2,30 @@ import React, {Component} from "react";
 import Bubble from "./bubble";
 import moment from 'moment';
 import 'moment/locale/fr'
+import {Link} from "react-router-dom";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import {toggleLike} from "../store/actions/posts";
+import {checkUser} from "../store/actions/auth";
+import getUserInfo from "../store/selectors/get_user_info";
 
-export default class Post extends Component{
+class Post extends Component{
+	
+	componentWillMount(){
+		const {checkUser} = this.props;
+		checkUser();
+	}
+	
+	like() {
+		const {post, checkUser, toggleLike} = this.props;
+		const {id} = post;
+		checkUser().then(user => toggleLike(id, user.username))
+	}
+	
+	
 	render(){
+		const {post, user} = this.props;
+		const {username} = user || {};
 		const {
 			name,
 			image,
@@ -12,20 +33,14 @@ export default class Post extends Component{
 			description,
 			date,
 			likes,
-		} = this.props.post;
-
-		const username = 'Plopy3'; //Replace with real username
-
-		const like = () => {
-			username in likes ? likes.push(username) : likes.pop(username);
-			console.log(likes);
-		};
+		} = post || {};
+		
 
 		return <div className={'post animated fadeIn'}>
 			<div className={'post-header d-flex justify-content-between align-items-center'}>
 				<div className={'d-flex align-items-center'}>
 					<Bubble image={image} mini/>
-					<div className={'post-name pl-1'}>{name}</div>
+					<div className={'post-name pl-1 link'}><Link to={`/profiles/${name}`}>{name}</Link></div>
 				</div>
 				<div className={'p-1'}>
 					<i className={'fa fa-ellipsis-v'}/>
@@ -34,7 +49,7 @@ export default class Post extends Component{
 			<img src={featured} className={'post-featured'} alt=""/>
 			<div className={'d-flex post-actions justify-content-between pt-1 pb-1'} >
 				<div className={'d-flex'}>
-					<i onClick={like} className={likes.indexOf(username) > -1 ? 'fa fa-heart' : 'fa fa-heart-o'}/>
+					<i onClick={() => this.like()} className={likes && likes.indexOf(username) > -1 ? 'fa fa-heart' : 'fa fa-heart-o'}/>
 					<i className={'fa fa-comment-o'}/>
 					<i className={'fa fa-paper-plane-o'}/>
 				</div>
@@ -55,3 +70,14 @@ export default class Post extends Component{
 		</div>
 	}
 }
+
+const mapStateToProps = (state) => ({
+	user: getUserInfo(state),
+});
+
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+	toggleLike,
+	checkUser
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Post)

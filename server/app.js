@@ -36,6 +36,7 @@ module.exports = require('./src/routes')(app, passportConfig);
 /**
  *  All the stories
  */
+app.use('/story/embed', passportConfig.isAuthenticated);
 app.use('/story/embed', express.static(__dirname + '/uploads'));
 
 /**
@@ -89,5 +90,12 @@ mongoose.connect(process.env.MONGODB_DOCKER || process.env.MONGODB_URI || proces
         ${chalk.red('✗')} MongoDB connection error. Please make sure MongoDB is running.`
     }));
 });
+
+/**
+ * Init cron tasks
+ */
+const cron = require('./src/cron');
+cron.init()
+
 
 module.exports = app;

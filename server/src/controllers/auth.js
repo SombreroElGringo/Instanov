@@ -295,7 +295,7 @@ exports.editPassword = (req, res, next) => {
 /** 
  * Delete user account
  * @function deleteAccount
- * @name /accounts/delete
+ * @name /accounts/
  * @method DELETE
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
