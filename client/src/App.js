@@ -6,7 +6,7 @@ import Sign from './components/account/sign';
 import Profile from './components/account/profile';
 import {Provider} from 'react-redux'
 import store from './store/index'
-import HttpError from "./components/HttpError";
+import HttpError from "./components/httpError";
 import {API_URL} from "./utils/env";
 
 
