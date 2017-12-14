@@ -400,11 +400,11 @@ article._profile {
 
 .tooltip .tooltiptext {
   visibility: hidden;
-  width: 120px;
-  background-color: black;
+  width: 240px;
+  background-color: rgba(16, 16, 16, 0.8);
   color: #fff;
   text-align: center;
-  border-radius: 6px;
+  border-radius: 3px;
   padding: 5px 0;
 
   /* Position the tooltip */
@@ -412,7 +412,7 @@ article._profile {
   z-index: 1;
   bottom: 100%;
   left: 50%;
-  margin-left: -60px;
+  margin-left: -120px;
 }
 
 .tooltip:hover .tooltiptext {

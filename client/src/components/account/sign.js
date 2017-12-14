@@ -68,6 +68,12 @@ class Sign extends Component {
                     this.setState({
                         errors: response.message || []
                     });
+                } else if (response.code === 404) {
+                    let emailError = response.message;
+                    emailError.param = 'email';
+                    this.setState({
+                        errors: [emailError]
+                    });
                 } else {
                     this.setState({
                         unhandledError: response
