@@ -3,7 +3,7 @@ import {Redirect} from 'react-router-dom';
 import {bindActionCreators} from "redux";
 import {handle_auth} from "../../store/actions/auth";
 import {connect} from "react-redux";
-import HttpError from "../HttpError";
+import HttpError from "../httpError";
 import getIsAuth from "../../store/selectors/get_is_auth";
 
 const API_URL = process.env.REACT_APP_PROD_API_URL || process.env.REACT_APP_DEV_API_URL;
@@ -67,6 +67,12 @@ class Sign extends Component {
                 if (response.code === 400) {
                     this.setState({
                         errors: response.message || []
+                    });
+                } else if (response.code === 404) {
+                    let emailError = response.message;
+                    emailError.param = 'email';
+                    this.setState({
+                        errors: [emailError]
                     });
                 } else {
                     this.setState({
@@ -178,7 +184,11 @@ class Sign extends Component {
                                         <h2 className={'app-sub-title'}>Vous nous avez manqué !</h2>
                                         <span className='info'/>
                                         <form onSubmit={e => this.handleSubmit(e)}>
-                                            <div className={'inpt-d'}>
+
+                                            <div
+                                                className={emailError ? 'tooltip inpt-d inpt-error' : 'tooltip inpt-d'}>
+                                                <span
+                                                    className={emailError ? 'tooltiptext' : 'invisible'}>{emailError && emailError.msg}</span>
                                                 <input className={'inpt-f'}
                                                        ref={(ref) => {
                                                            this.email = ref
@@ -187,7 +197,11 @@ class Sign extends Component {
                                                        name='email'
                                                        placeholder='E-mail'/>
                                             </div>
-                                            <div className={'inpt-d'}>
+
+                                            <div
+                                                className={passwordError ? 'tooltip inpt-d inpt-error' : 'tooltip inpt-d'}>
+                                                <span
+                                                    className={passwordError ? 'tooltiptext' : 'invisible'}>{passwordError && passwordError.msg}</span>
                                                 <input className={'inpt-f'}
                                                        ref={(ref) => {
                                                            this.password = ref
@@ -196,6 +210,7 @@ class Sign extends Component {
                                                        name='password'
                                                        placeholder='Mot de passe'/>
                                             </div>
+                                            
                                             <input className={'btn-form'}
                                                    type='submit'
                                                    value='Se connecter'/>
