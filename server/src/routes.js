@@ -54,6 +54,7 @@ module.exports = function(app, passport) {
     /**
      * Story routes
      */
+    app.get('/story/:id', passport.isAuthenticated, storyController.getStoryById);
     app.post('/story', upload.single('story'), passport.isAuthenticated, storyController.createStory);
     app.put('/story/:id', passport.isAuthenticated, storyController.editStoryById);
     app.delete('/story/:id', passport.isAuthenticated, storyController.deleteStoryById);
