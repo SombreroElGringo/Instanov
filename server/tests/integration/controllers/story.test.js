@@ -22,6 +22,105 @@ describe('controllers/story.js', () => {
     });
 
 
+    describe('GET /story/:id', () => {
+        it('should return 400', (done) => {
+            request(app)
+            .get('/story/sjqi182882929290s')
+            .expect(400, done);
+        });
+
+        it('should return 500', (done) => {
+            
+            const agent = request.agent(app);
+            
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'success',
+            })
+            .end(() => {
+                agent.get('/story/18282hquhd727812')
+                .expect(500, done);
+            });
+        });
+
+        it('should return 200', (done) => {
+            
+            const agent = request.agent(app);
+            
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'success',
+            })
+            .end(() => {
+                agent.post('/story')
+                .field('username', 'test_instanov')
+                .field('hastag', '#japan #ryokan')
+                .field('desrcription', 'japan test')
+                .attach('story', `${__dirname}/../../images/test.jpeg`)
+                .end(() => {
+                    Story.findOne({username: 'test_instanov'}).then(story => {
+                        agent.get(`/story/${story._id}`)
+                        .expect(200, done); 
+                    })
+                    .catch(done);
+                });
+            });
+        });
+    });
+
+
+    describe('GET /story/:id/like/:username', () => {
+        it('should return 400', (done) => {
+            request(app)
+            .put('/story/sjqi182882929290s/like/test_instanov')
+            .expect(400, done);
+        });
+
+        it('should return 500', (done) => {
+            
+            const agent = request.agent(app);
+            
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'success',
+            })
+            .end(() => {
+                agent.put('/story/18282hquhd727812/like/test_instanov')
+                .expect(500, done);
+            });
+        });
+
+        it('should return 200', (done) => {
+            
+            const agent = request.agent(app);
+            
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'success',
+            })
+            .end(() => {
+                agent.post('/story')
+                .field('username', 'test_instanov')
+                .field('hastag', '#japan #ryokan')
+                .field('desrcription', 'japan test')
+                .attach('story', `${__dirname}/../../images/test.jpeg`)
+                .end(() => {
+                    Story.findOne({username: 'test_instanov'}).then(story => {
+                        agent.put(`/story/${story._id}/like/test_instanov`)
+                        .expect(200, done); 
+                    })
+                    .catch(done);
+                });
+            });
+        });
+    });
+
+
+
     describe('POST /story', () => {
         it('should return 400 Bad Login', (done) => {
             request(app)
