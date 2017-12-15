@@ -212,24 +212,9 @@ exports.getAccount = (req, res) => {
  * @param {Function} next - Express next middleware function 
  */
 exports.editAccount = (req, res, next) => {
-    req.assert('email', 'Please enter a valid email address.').isEmail();
-    req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
-  
-    const errors = req.validationErrors();
-  
-    if (errors) {
-        return res.status(400)
-            .json({
-            code: 400,
-            status: 'error',
-            message: errors,
-        });
-    }
   
     User.findById(req.user.id, (err, user) => {
         if (err) { return next(err); }
-        user.email = req.body.email || '';
-        user.profile.name = req.body.name || '';
         user.profile.description = req.body.description || '';
         user.save((err) => {
             if (err) {

@@ -9,8 +9,12 @@ import Loader from "../loaders/loader";
 import {Link} from "react-router-dom";
 import * as _ from "lodash";
 import getUserInfo from "../../store/selectors/get_user_info";
+import fetch from 'cross-fetch';
+import {API_URL} from "../../utils/env";
 
 class Profile extends Component {
+	state = {edition: true};
+	
 	componentWillMount() {
 		const {fetchUserPosts, fetchLikesFromUser} = this.props;
 		const {username} = this.props.match.params;
@@ -19,6 +23,7 @@ class Profile extends Component {
 	}
 	
 	render() {
+		const {edition} = this.state;
 		const {user, posts, history, liked, current_user} = this.props;
 		const {goBack} = history;
 		const {profile, username, name, description} = user || {};
@@ -63,14 +68,38 @@ class Profile extends Component {
 												<div>liked stories</div>
 											</div>
 										</div>
-										{current_user.username === username
-											? <div className="button">Modifier le profil</div>
-											: <div className="button">Modifier le profil</div>}
+										{
+											current_user
+											&& current_user.username === username
+											&& <div className="button"
+											        onClick={() => this.toggleEdition()}>Modifier le profil</div>
+										}
 									</div>
 								</div>
 								<div className="description">
 									<div className="name">{name}</div>
-									<div className="text">{description}</div>
+									<div className="text">
+										{
+											!edition
+												? description
+												: <div className={"editor"}>
+													<textarea defaultValue={description}
+													          ref={ref => this.description = ref}/>
+													<div className="accept"
+													     onClick={() => this.handleSubmition()}>
+														<i className={"fa fa-check link"}/>
+													</div>
+													<div className="cancel"
+													     onClick={() => {
+														     this.toggleEdition();
+														     this.resetValue()
+													     }}>
+														<i className={"fa fa-times link"}/>
+													</div>
+												</div>
+											
+										}
+									</div>
 								</div>
 							</div>
 							<div className="filter_icons">
@@ -114,6 +143,29 @@ class Profile extends Component {
 				</section>
 			</div>
 		);
+	}
+	
+	toggleEdition() {
+		const {edition} = this.state;
+		this.setState({edition: !edition})
+	}
+	
+	resetValue() {
+		this.description.value = "";
+	}
+	
+	async handleSubmition() {
+		try{
+			
+			const url = `${API_URL}/accounts/profile`;
+			const options = {credentials: "include", method: "POST", data: {description: this.description.value}};
+			const response = await fetch(url, options);
+			if (!response.ok)
+				throw new Error(`cannot change description fror ${this.props.current_user.username}`)
+			console.log(await response.json())
+		}catch(err){
+			console.error(err);
+		}
 	}
 }
 

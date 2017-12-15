@@ -1,5 +1,6 @@
 import {FETCH_POST, FETCH_POST_FAIL, FETCH_POST_SUCCESS} from './consts';
 import {API_URL} from "../../utils/env";
+import fetch from 'cross-fetch';
 
 
 export const fetchPost = (id) => {
