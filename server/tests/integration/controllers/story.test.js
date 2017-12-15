@@ -120,6 +120,44 @@ describe('controllers/story.js', () => {
     });
 
 
+    describe('GET /story/liked/:username', () => {
+        it('should return 400', (done) => {
+            request(app)
+            .get('/story/liked/sjqi182882929290s')
+            .expect(400, done);
+        });
+
+        it('should return 500', (done) => {
+            
+            const agent = request.agent(app);
+            
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'failed',
+            })
+            .end(() => {
+                agent.get('/story/liked/18282hquhd727812')
+                .expect(400, done);
+            });
+        });
+
+        it('should return 200', (done) => {
+            
+            const agent = request.agent(app);
+            
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'success',
+            })
+            .end(() => {  
+                agent.get(`/story/liked/test_instanov`)
+                .expect(200, done); 
+            });
+        });
+    });
+
 
     describe('POST /story', () => {
         it('should return 400 Bad Login', (done) => {

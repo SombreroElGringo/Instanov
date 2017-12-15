@@ -58,6 +58,7 @@ module.exports = function(app, passport) {
     app.post('/story', upload.single('story'), passport.isAuthenticated, storyController.createStory);
     app.put('/story/:id', passport.isAuthenticated, storyController.editStoryById);
     app.delete('/story/:id', passport.isAuthenticated, storyController.deleteStoryById);
+    app.get('/story/liked/:username', passport.isAuthenticated, storyController.storiesLikedByUser);
     app.put('/story/:id/like/:username', passport.isAuthenticated, storyController.likeStoryById);
     app.post('/story/:id/like/:username', passport.isAuthenticated, storyController.likeStoryById);
 
