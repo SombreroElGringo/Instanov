@@ -11,6 +11,7 @@
     "dotenv": "^4.0.0",
     "gulp-sass": "^3.1.0",
     "immutable": "latest",
+    "lodash": "^4.17.4",
     "moment": "^2.19.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",

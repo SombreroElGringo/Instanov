@@ -59,6 +59,7 @@ module.exports = function(app, passport) {
     app.put('/story/:id', passport.isAuthenticated, storyController.editStoryById);
     app.delete('/story/:id', passport.isAuthenticated, storyController.deleteStoryById);
     app.put('/story/:id/like/:username', passport.isAuthenticated, storyController.likeStoryById);
+    app.post('/story/:id/like/:username', passport.isAuthenticated, storyController.likeStoryById);
 
     /**
      * API routes.

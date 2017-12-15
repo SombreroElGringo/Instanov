@@ -1,0 +1,40 @@
+.App > div {
+  background-color: #fafafa;
+  .news-content {
+    max-width: 960px;
+    margin: 0 auto;
+    background-color: white;
+    .post {
+      .post-header{
+        img{
+          width: 32px;
+          height: 32px;
+        }
+      }
+      &:not(:last-child) {
+        border-bottom: 1px solid lightgray;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+      }
+      .post-featured {
+        width: 100%;
+        background: url("https://m.popkey.co/8618d2/DyVJx.gif") no-repeat;
+        background-size: contain;
+        background-position: center;
+        //min-height: 100vw;
+        @media screen and (min-width: 960px) {
+          min-height: 600px;
+        }
+      }
+      .post-actions {
+        font-size: 30px;
+        i {
+          padding: 0 10px;
+        }
+      }
+      .post-date {
+        color: gray;
+      }
+    }
+  }
+}
