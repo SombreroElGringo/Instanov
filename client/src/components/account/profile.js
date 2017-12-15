@@ -8,6 +8,7 @@ import CircleSpinner from '../loaders/circle_spinner';
 import Loader from "../loaders/loader";
 import {Link} from "react-router-dom";
 import * as _ from "lodash";
+import getUserInfo from "../../store/selectors/get_user_info";
 
 class Profile extends Component {
 	componentWillMount() {
@@ -18,7 +19,7 @@ class Profile extends Component {
 	}
 	
 	render() {
-		const {user, posts, history, liked} = this.props;
+		const {user, posts, history, liked, current_user} = this.props;
 		const {goBack} = history;
 		const {profile, username, name, description} = user || {};
 		const {picture} = profile || {};
@@ -62,7 +63,9 @@ class Profile extends Component {
 												<div>liked stories</div>
 											</div>
 										</div>
-										<div className="button">Modifier le profil</div>
+										{current_user.username === username
+											? <div className="button">Modifier le profil</div>
+											: <div className="button">Modifier le profil</div>}
 									</div>
 								</div>
 								<div className="description">
@@ -117,7 +120,8 @@ class Profile extends Component {
 const mapStateToProps = (state) => ({
 	user: getUserPosts(state).user,
 	posts: getUserPosts(state).stories,
-	liked: getUserNumbersOfLikes(state)
+	liked: getUserNumbersOfLikes(state),
+	current_user: getUserInfo(state),
 });
 const mapDispatchToProps = (dispatch) => bindActionCreators({fetchUserPosts, fetchLikesFromUser}, dispatch);
 

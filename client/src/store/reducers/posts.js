@@ -2,7 +2,7 @@ import {Map} from 'immutable'
 import {FETCH_LIKES_FROM_USER_SUCCESS, FETCH_POSTS_SUCCESS, FETCH_USER_POSTS_SUCCESS, LIKE_POST} from "../actions/consts";
 
 const initialState = Map({
-	posts: [],
+	posts: undefined,
 	user_posts: [],
 	liked: undefined
 });
@@ -13,7 +13,7 @@ const handlers = {
 	[LIKE_POST]: (state, action) => state.update("posts", (posts) => {
 		const {id, username} = action.payload;
 		posts = posts.map(post => {
-			if(post._id === id){
+			if (post._id === id) {
 				if (post.likes.indexOf(username) >= 0)
 					post.likes = post.likes.slice(post.likes.indexOf(username), -1);
 				else

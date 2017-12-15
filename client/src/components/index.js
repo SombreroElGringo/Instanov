@@ -8,5 +8,5 @@ export {
 	News,
 	Bubble,
 	Content,
-	Post
+	Post,
 }

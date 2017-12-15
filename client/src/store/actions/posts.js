@@ -1,7 +1,16 @@
 import fetch from 'cross-fetch';
 import {
-	FETCH_LIKES_FROM_USER, FETCH_LIKES_FROM_USER_FAIL, FETCH_LIKES_FROM_USER_SUCCESS, FETCH_POSTS, FETCH_POSTS_FAIL, FETCH_POSTS_SUCCESS, FETCH_USER_POSTS, FETCH_USER_POSTS_FAIL,
-	FETCH_USER_POSTS_SUCCESS, LIKE_POST, LIKE_POST_FAIL,
+	FETCH_LIKES_FROM_USER,
+	FETCH_LIKES_FROM_USER_FAIL,
+	FETCH_LIKES_FROM_USER_SUCCESS,
+	FETCH_POSTS,
+	FETCH_POSTS_FAIL,
+	FETCH_POSTS_SUCCESS,
+	FETCH_USER_POSTS,
+	FETCH_USER_POSTS_FAIL,
+	FETCH_USER_POSTS_SUCCESS,
+	LIKE_POST,
+	LIKE_POST_FAIL,
 	LIKE_POST_SUCCESS
 } from "./consts";
 import {API_URL} from "../../utils/env";
@@ -73,7 +82,7 @@ export const fetchLikesFromUser = (username) => {
 			const url = `${API_URL}/story/liked/${username}`;
 			const options = {credentials: "include"};
 			const response = await fetch(url, options);
-			if(!response.ok) throw new Error(`Cannot fetch likes for ${username}`);
+			if (!response.ok) throw new Error(`Cannot fetch likes for ${username}`);
 			const json = await response.json();
 			dispatch({type: FETCH_LIKES_FROM_USER_SUCCESS, payload: json.stories})
 		} catch (err) {

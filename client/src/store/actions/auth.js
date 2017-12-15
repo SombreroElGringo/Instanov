@@ -19,8 +19,8 @@ export const checkUser = () => {
 		
 		try {
 			const response = await fetch(temp_check_user_url, fetch_options);
+			if (!response.ok) throw new Error("Error while fetching user");
 			const json = await response.json();
-			
 			if (!json.user)
 				throw new Error("user not found");
 			
@@ -45,7 +45,7 @@ export const logout = () => {
 			
 			if (json.code !== 200)
 				throw new Error('Logout failed');
-
+			
 			dispatch({type: LOGOUT_SUCCESS})
 		} catch (err) {
 			dispatch({type: LOGOUT_FAIL, err})
