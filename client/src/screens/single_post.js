@@ -3,7 +3,7 @@ import getPost from "../store/selectors/get_post";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import {fetchPost} from "../store/actions/post";
-import Loader from "../components/loader"
+import Loader from "../components/loaders/loader"
 import Post from "../components/post";
 import isLoading from "../store/selectors/get_is_loading";
 import {fetchPosts} from "../store/actions/posts";

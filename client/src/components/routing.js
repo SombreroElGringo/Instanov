@@ -5,10 +5,13 @@ import Sign from './account/sign';
 import Profile from './account/profile';
 import HttpError from "./httpError";
 import {connect} from 'react-redux'
+import {bindActionCreators} from "redux";
+import {checkUser} from "../store/actions/auth";
 
 class Routing extends React.Component{
 	componentWillMount(){
-		const {checkAuth} = this.props;
+		const {checkUser} = this.props;
+		checkUser();
 	}
 	
 	render(){
@@ -39,6 +42,8 @@ class Routing extends React.Component{
 }
 
 const mapStateToProps = null;
-const mapDispatchToProps = null;
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+	checkUser
+},dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Routing);

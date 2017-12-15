@@ -1,21 +1,24 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import getUserPosts from "../../store/selectors/get_user_posts";
+import getUserNumbersOfLikes from "../../store/selectors/get_user_numbers_of_likes";
 import {bindActionCreators} from "redux";
-import {fetchUserPosts} from "../../store/actions/posts";
-import Loader from "../loader";
+import {fetchLikesFromUser, fetchUserPosts} from "../../store/actions/posts";
+import CircleSpinner from '../loaders/circle_spinner';
+import Loader from "../loaders/loader";
 import {Link} from "react-router-dom";
 import * as _ from "lodash";
 
 class Profile extends Component {
 	componentWillMount() {
-		const {fetchUserPosts} = this.props;
+		const {fetchUserPosts, fetchLikesFromUser} = this.props;
 		const {username} = this.props.match.params;
 		fetchUserPosts(username).catch(err => this.props.history.goBack());
+		fetchLikesFromUser(username);
 	}
 	
 	render() {
-		const {user, posts, history} = this.props;
+		const {user, posts, history, liked} = this.props;
 		const {goBack} = history;
 		const {profile, username, name, description} = user || {};
 		const {picture} = profile || {};
@@ -51,8 +54,12 @@ class Profile extends Component {
 												<div>likes</div>
 											</div>
 											<div className="mySubs">
-												<div>101</div>
-												<div>abos</div>
+												<div>{liked === undefined
+													? <CircleSpinner/>
+													: !liked
+														? 0
+														: liked.length}</div>
+												<div>liked stories</div>
 											</div>
 										</div>
 										<div className="button">Modifier le profil</div>
@@ -109,8 +116,9 @@ class Profile extends Component {
 
 const mapStateToProps = (state) => ({
 	user: getUserPosts(state).user,
-	posts: getUserPosts(state).stories
+	posts: getUserPosts(state).stories,
+	liked: getUserNumbersOfLikes(state)
 });
-const mapDispatchToProps = (dispatch) => bindActionCreators({fetchUserPosts}, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({fetchUserPosts, fetchLikesFromUser}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile)

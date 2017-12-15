@@ -1,9 +1,10 @@
 import {Map} from 'immutable'
-import {FETCH_POSTS_SUCCESS, FETCH_USER_POSTS_SUCCESS, LIKE_POST, LIKE_POST_SUCCESS} from "../actions/consts";
+import {FETCH_LIKES_FROM_USER_SUCCESS, FETCH_POSTS_SUCCESS, FETCH_USER_POSTS_SUCCESS, LIKE_POST} from "../actions/consts";
 
 const initialState = Map({
 	posts: [],
 	user_posts: [],
+	liked: undefined
 });
 
 const handlers = {
@@ -22,7 +23,8 @@ const handlers = {
 		});
 		
 		return posts
-	})
+	}),
+	[FETCH_LIKES_FROM_USER_SUCCESS]: (state, action) => state.set("liked", action.payload)
 };
 
 export default (state = initialState, action) => {

@@ -22,7 +22,7 @@ const passportConfig = require('./config/passport');
  *  Create Express Server
  */
 const app = express();
-
+app.use((req, res, next) => setTimeout(next, 1000));
 /**
  * Express configuration.
  */

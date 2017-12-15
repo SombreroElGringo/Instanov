@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Berkshire+Swash');
-@import "_util";
-@import "_header";
-@import "_app_all_first_div";
-@import "_bubble_header";
-@import "_titles";
+@import "components/util";
+@import "components/header";
+@import "components/app_all_first_div";
+@import "components/bubble_header";
+@import "components/titles";
 
 a {
   color: #000;
@@ -22,7 +22,7 @@ a {
   position: relative;
 }
 
-@import "_forms";
+@import "components/forms";
 
 ._line {
   width: 100%;
@@ -54,9 +54,9 @@ section.fs-fafafa {
 
 ._profile{
   i{cursor: pointer;  }
-  @import "_h_profile";
-  @import "_usr_stories";
+  @import "components/h_profile";
+  @import "components/usr_stories";
 }
 
-@import "_http_error";
-@import "_tooltips";
+@import "components/http_error";
+@import "components/tooltips";

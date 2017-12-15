@@ -253,7 +253,7 @@ exports.storiesLikedByUser = (req, res, next) => {
     
     const username = req.params.username;
 
-    Story.findOne({likes: username})
+    Story.find({likes: username})
         .sort('-date')
         .then(stories => {
 

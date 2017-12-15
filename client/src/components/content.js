@@ -5,7 +5,7 @@ import getPosts from "../store/selectors/get_posts";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import {fetchPosts} from "../store/actions/posts";
-import Loader from './loader'
+import Loader from './loaders/loader'
 
 
 class Content extends React.Component {

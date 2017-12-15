@@ -6,20 +6,13 @@ import {Link} from "react-router-dom";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import {toggleLike} from "../store/actions/posts";
-import {checkUser} from "../store/actions/auth";
 import getUserInfo from "../store/selectors/get_user_info";
 
 class Post extends Component{
-	
-	componentWillMount(){
-		const {checkUser} = this.props;
-		checkUser();
-	}
-	
 	like() {
-		const {post, checkUser, toggleLike} = this.props;
+		const {post, toggleLike, user} = this.props;
 		const {id} = post;
-		checkUser().then(user => toggleLike(id, user.username))
+		toggleLike(id, user.username)
 	}
 	
 	
@@ -76,8 +69,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-	toggleLike,
-	checkUser
+	toggleLike
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post)
