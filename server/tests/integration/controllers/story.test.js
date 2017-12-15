@@ -173,7 +173,7 @@ describe('controllers/story.js', () => {
             agent.post('/login')
             .send({
                 email: 'test.instanov@gmail.com',
-                password: 'success',
+                password: 'failed',
             })
             .end(() => {
                 agent.post('/story')
