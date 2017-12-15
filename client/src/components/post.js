@@ -39,7 +39,8 @@ class Post extends Component {
 		} = post || {};
 		
 		
-		return <div className={'post animated fadeIn'}>
+		return <div className={'post animated fadeIn'} >
+				{!this.state.ready && <p/>}
 			<ReactPlaceholder type={"media"}
 			                  ready={this.state.ready}
 			                  rows={10}
