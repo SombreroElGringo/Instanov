@@ -198,9 +198,9 @@ exports.deleteStoryById = (req, res, next) => {
 
 /** 
  *  Like or unlike a story if already liked
- * @function editStoryById
+ * @function likeStoryById
  * @name /story/:id/like/:username
- * @method PUT
+ * @method PUT||POST
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  * @param {Function} next - Express next middleware function 
@@ -230,6 +230,38 @@ exports.likeStoryById = (req, res, next) => {
             });
     })
     .catch(err =>{
+        return res.status(404)
+            .json({
+            code: 404,
+            status: 'error',
+            message: 'Story not found!',
+        });
+    });
+}
+
+
+/** 
+ * Return all the storiesLiked
+ * @function storiesLikedByUser
+ * @name /story/liked/:username
+ * @method GET
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function 
+ */
+exports.storiesLikedByUser = (req, res, next) => {
+    
+    const username = req.params.username;
+
+    Story.findOne({likes: username})
+        .sort('-date')
+        .then(stories => {
+
+        res.json({ 
+            stories
+        });
+    })
+    .catch(err => {
         return res.status(404)
             .json({
             code: 404,
