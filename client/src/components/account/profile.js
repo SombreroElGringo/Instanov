@@ -5,6 +5,7 @@ import {bindActionCreators} from "redux";
 import {fetchUserPosts} from "../../store/actions/posts";
 import Loader from "../loader";
 import {Link} from "react-router-dom";
+import * as _ from "lodash";
 
 class Profile extends Component {
 	componentWillMount() {
@@ -18,7 +19,6 @@ class Profile extends Component {
 		const {goBack} = history;
 		const {profile, username, name, description} = user || {};
 		const {picture} = profile || {};
-		
 		
 		return !user ? <Loader/> : (
 			<div>
@@ -43,12 +43,12 @@ class Profile extends Component {
 									<div className="stats_and_button">
 										<div className="stats">
 											<div className="posts">
-												<div>26</div>
+												<div>{posts.length}</div>
 												<div>publi.</div>
 											</div>
 											<div className="subs">
-												<div>13</div>
-												<div>abonnés</div>
+												<div>{_.sum(posts.map(post => post.likes.length))}</div>
+												<div>likes</div>
 											</div>
 											<div className="mySubs">
 												<div>101</div>

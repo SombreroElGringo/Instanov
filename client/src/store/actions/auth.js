@@ -14,6 +14,7 @@ export const checkUser = () => {
 		dispatch({type: CHECK_USER});
 		
 		const temp_check_user_url = API_URL + '/profiles/demorite';
+		
 		const fetch_options = {credentials: "include"};
 		
 		try {

@@ -10,7 +10,7 @@ import {fetchPosts} from "../store/actions/posts";
 
 class SinglePost extends React.Component {
 	componentDidMount() {
-		const {fetchPost, post, fetchPosts} = this.props;
+		const {fetchPost, fetchPosts} = this.props;
 		fetchPost(this.props.match.params.id);
 		fetchPosts();
 	}
