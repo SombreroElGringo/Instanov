@@ -13,7 +13,7 @@ export const checkUser = () => {
 	return async (dispatch) => {
 		dispatch({type: CHECK_USER});
 		
-		const temp_check_user_url = API_URL + '/profiles/demorite';
+		const temp_check_user_url = API_URL + '/profiles/current/session';
 		
 		const fetch_options = {credentials: "include"};
 		
