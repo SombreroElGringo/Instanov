@@ -15,11 +15,9 @@ const _ = require('lodash');
  * @param {Function} next - Express next middleware function 
  */
 exports.createStory = (req, res, next) => { 
+    const username = res.locals.user.profile.username;
 
-    req.assert('username', 'Username cannot be empty').notEmpty();
-    const errors = req.validationErrors();
-    
-    if (errors) {
+    if (!username) {
         return res.status(400)
             .json({
             code: 400,
@@ -33,7 +31,7 @@ exports.createStory = (req, res, next) => {
     let path = req.protocol + '://'+ req.get('host') + '/story/embed/' + req.file.filename; 
     
     const story = new Story({
-        username: req.body.username,
+        username: username,
         info: {
             description: req.body.description,
             hashtag: hashtag,
