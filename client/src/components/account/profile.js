@@ -8,8 +8,13 @@ import CircleSpinner from '../loaders/circle_spinner';
 import Loader from "../loaders/loader";
 import {Link} from "react-router-dom";
 import * as _ from "lodash";
+import getUserInfo from "../../store/selectors/get_user_info";
+import fetch from 'cross-fetch';
+import {API_URL} from "../../utils/env";
 
 class Profile extends Component {
+	state = {edition: true, description: undefined};
+	
 	componentWillMount() {
 		const {fetchUserPosts, fetchLikesFromUser} = this.props;
 		const {username} = this.props.match.params;
@@ -18,7 +23,8 @@ class Profile extends Component {
 	}
 	
 	render() {
-		const {user, posts, history, liked} = this.props;
+		const {edition} = this.state;
+		const {user, posts, history, liked, current_user} = this.props;
 		const {goBack} = history;
 		const {profile, username, name, description} = user || {};
 		const {picture} = profile || {};
@@ -62,12 +68,38 @@ class Profile extends Component {
 												<div>liked stories</div>
 											</div>
 										</div>
-										<div className="button">Modifier le profil</div>
+										{
+											current_user
+											&& current_user.username === username
+											&& <div className="button"
+											        onClick={() => this.toggleEdition()}>Modifier le profil</div>
+										}
 									</div>
 								</div>
 								<div className="description">
 									<div className="name">{name}</div>
-									<div className="text">{description}</div>
+									<div className="text">
+										{
+											edition
+												? this.state.description || description
+												: <div className={"editor"}>
+													<textarea defaultValue={description}
+													          ref={ref => this.description = ref}/>
+													<div className="accept"
+													     onClick={() => this.handleSubmition()}>
+														<i className={"fa fa-check link"}/>
+													</div>
+													<div className="cancel"
+													     onClick={() => {
+														     this.toggleEdition();
+														     this.resetValue()
+													     }}>
+														<i className={"fa fa-times link"}/>
+													</div>
+												</div>
+											
+										}
+									</div>
 								</div>
 							</div>
 							<div className="filter_icons">
@@ -112,12 +144,45 @@ class Profile extends Component {
 			</div>
 		);
 	}
+	
+	toggleEdition() {
+		const {edition} = this.state;
+		this.setState({edition: !edition})
+	}
+	
+	resetValue(value) {
+		this.description.value = "";
+		if(value) this.setState({description: value})
+	}
+	
+	async handleSubmition() {
+		try {
+			const url = `${API_URL}/accounts/profile`;
+			const body = `description=${encodeURI(this.description.value)}`;
+			const options = {
+				method: 'POST',
+				credentials: 'include',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				body: body
+			};
+			this.toggleEdition();
+			this.resetValue(this.description.value);
+			const response = await fetch(url, options);
+			if (!response.ok)
+				throw new Error(`cannot change description from ${this.props.current_user.username}`)
+		} catch (err) {
+			console.error(err);
+		}
+	}
 }
 
 const mapStateToProps = (state) => ({
 	user: getUserPosts(state).user,
 	posts: getUserPosts(state).stories,
-	liked: getUserNumbersOfLikes(state)
+	liked: getUserNumbersOfLikes(state),
+	current_user: getUserInfo(state),
 });
 const mapDispatchToProps = (dispatch) => bindActionCreators({fetchUserPosts, fetchLikesFromUser}, dispatch);
 

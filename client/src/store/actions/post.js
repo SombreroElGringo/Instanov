@@ -1,17 +1,18 @@
 import {FETCH_POST, FETCH_POST_FAIL, FETCH_POST_SUCCESS} from './consts';
 import {API_URL} from "../../utils/env";
+import fetch from 'cross-fetch';
 
 
 export const fetchPost = (id) => {
 	return async (dispatch) => {
 		dispatch({type: FETCH_POST});
 		
-		try{
+		try {
 			const url = `${API_URL}/story/${id}`;
 			const options = {credentials: "include"};
 			
 			const response = await fetch(url, options);
-			if(!response.ok) throw new Error("An error occured");
+			if (!response.ok) throw new Error("An error occured");
 			const story = (await response.json()).story;
 			const payload = story._id;
 			
@@ -19,7 +20,7 @@ export const fetchPost = (id) => {
 				type: FETCH_POST_SUCCESS,
 				payload
 			})
-		}catch(err){
+		} catch (err) {
 			dispatch({
 				type: FETCH_POST_FAIL,
 				err

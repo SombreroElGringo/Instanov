@@ -212,7 +212,6 @@ exports.getAccount = (req, res) => {
  * @param {Function} next - Express next middleware function 
  */
 exports.editAccount = (req, res, next) => {
-  
     User.findById(req.user.id, (err, user) => {
         if (err) { return next(err); }
         user.profile.description = req.body.description || '';
@@ -232,7 +231,7 @@ exports.editAccount = (req, res, next) => {
                 .json({
                 code: 200,
                 status: 'success',
-                message: 'Profile information has beeb updated!',
+                message: 'Profile information has been updated!',
             });
         });
     });

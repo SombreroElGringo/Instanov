@@ -3,7 +3,7 @@ import {FETCH_POST, FETCH_POST_FAIL, FETCH_POST_SUCCESS} from "../actions/consts
 
 const initialState = Map({
 	post: null,
-	isLoading: true,
+	isLoading: undefined,
 });
 
 const handlers = {

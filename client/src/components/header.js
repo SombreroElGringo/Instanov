@@ -23,10 +23,8 @@ class Header extends React.Component {
 					<li className={'logo'}>Instanov</li>
 					<li>
 						{
-							isAuth ? <i className={'fa fa-lock'}
-							            onClick={logout}/> : <Link to={"/sign"}>
-								<i className={'fa fa-send'}/>
-							</Link>
+							isAuth ? <i className={'fa fa-lock link'}
+							            onClick={logout}/> : <i className={'fa fa-send link'}/>
 						}
 						{
 							username && <Link to={`/profiles/${username}`}>

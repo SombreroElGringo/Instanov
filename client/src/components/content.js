@@ -17,8 +17,7 @@ class Content extends React.Component {
 	
 	render() {
 		const {posts} = this.props;
-		
-		if (!posts)
+		if (posts === undefined)
 			return <Loader/>;
 		
 		if (posts.length < 1)
