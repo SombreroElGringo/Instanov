@@ -13,7 +13,7 @@ import fetch from 'cross-fetch';
 import {API_URL} from "../../utils/env";
 
 class Profile extends Component {
-	state = {edition: true};
+	state = {edition: true, description: undefined};
 	
 	componentWillMount() {
 		const {fetchUserPosts, fetchLikesFromUser} = this.props;
@@ -80,8 +80,8 @@ class Profile extends Component {
 									<div className="name">{name}</div>
 									<div className="text">
 										{
-											!edition
-												? description
+											edition
+												? this.state.description || description
 												: <div className={"editor"}>
 													<textarea defaultValue={description}
 													          ref={ref => this.description = ref}/>
@@ -150,20 +150,29 @@ class Profile extends Component {
 		this.setState({edition: !edition})
 	}
 	
-	resetValue() {
+	resetValue(value) {
 		this.description.value = "";
+		if(value) this.setState({description: value})
 	}
 	
 	async handleSubmition() {
-		try{
-			
+		try {
 			const url = `${API_URL}/accounts/profile`;
-			const options = {credentials: "include", method: "POST", data: {description: this.description.value}};
+			const body = `description=${encodeURI(this.description.value)}`;
+			const options = {
+				method: 'POST',
+				credentials: 'include',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				body: body
+			};
+			this.toggleEdition();
+			this.resetValue(this.description.value);
 			const response = await fetch(url, options);
 			if (!response.ok)
-				throw new Error(`cannot change description fror ${this.props.current_user.username}`)
-			console.log(await response.json())
-		}catch(err){
+				throw new Error(`cannot change description from ${this.props.current_user.username}`)
+		} catch (err) {
 			console.error(err);
 		}
 	}
