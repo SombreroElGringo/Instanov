@@ -6,7 +6,9 @@
     display: flex;
     justify-content: space-between;
     padding: 10px;
-    i {  padding: 0 10px;  }
+    i {
+      padding: 0 10px;
+    }
   }
   .infos {
     .thumb_and_stats {
@@ -31,34 +33,74 @@
           justify-content: space-between;
           align-items: center;
           padding: 0 10px 10px;
-          & > div{
+          & > div {
             flex: 1;
             text-align: center;
-            :first-child{
+            :first-child {
               font-size: 1.5em;
               font-weight: bold;
               padding-bottom: 5px;
             }
-            :last-child{  color: gray;  }
+            :last-child {
+              color: gray;
+            }
           }
         }
-        .button{
+        .button {
           text-align: center;
           border: 1px solid lightgray;
           border-radius: 3px;
           padding: 5px;
           cursor: pointer;
+          user-select: none;
+          transition: all 200ms;
+          &:hover {
+            background-color: #eee
+          }
+          &:active {
+            background-color: #ddd
+          }
         }
       }
     }
-    .description{
+    .description {
       padding: 20px;
       font-size: 0.9rem;
-      .name{  font-weight: bold;  }
-      .text{  padding: 10px 0 0 0;  }
+      .name {
+        font-weight: bold;
+      }
+      .text {
+        padding: 10px 0 0 0;
+        .editor {
+          display: flex;
+          flex-wrap: wrap;
+          textarea {
+            width: 100%;
+            resize: none;
+            height: 5rem;
+            border-radius: 5px;
+            border: 1px solid gray;
+            font-size: 1rem;
+            &:focus {
+              outline: none;
+            }
+          }
+          div {
+            margin-top: 10px;
+            font-size: 2rem;
+            margin-right: 20px;
+            background-color: white;
+            padding: 0 10px;
+            border: 1px solid lightgray;
+            border-radius: 10px;
+            &.accept i{color: green;}
+            &.cancel i{color: darkred;}
+          }
+        }
+      }
     }
   }
-  .filter_icons{
+  .filter_icons {
     border-top: 1px solid lightgray;
     display: flex;
     justify-content: space-around;

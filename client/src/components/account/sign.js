@@ -5,6 +5,7 @@ import {handle_auth} from "../../store/actions/auth";
 import {connect} from "react-redux";
 import HttpError from "../httpError";
 import getIsAuth from "../../store/selectors/get_is_auth";
+import fetch from 'cross-fetch';
 
 const API_URL = process.env.REACT_APP_PROD_API_URL || process.env.REACT_APP_DEV_API_URL;
 
