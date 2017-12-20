@@ -7,214 +7,470 @@
     },
     "produces": ["application/json"],
     "paths": {
-      "/": {
-        "get": {
-          "x-swagger-router-controller": "home",
-          "operationId": "index",
-          "tags": ["Index"],
-          "description": "Home page",
-          "parameters": [],
-          "responses": {}
-        }
-      },
-      "/login": {
-         "get": {
-           "x-swagger-router-controller": "login",
-           "operationId": "login",
-           "tags": ["Auth"],
-           "description": "Login page",
-           "parameters": [],
-           "responses": {}
-         }
-       },
-       "/login ": {
-          "post": {
-            "x-swagger-router-controller": "login",
-            "operationId": "login",
-            "tags": ["Auth"],
-            "description": "Sign in using email and password",
-            "parameters": [
-                {   
-                    "name" : "email",
-                    "in": "body",
-                    "required": true,
-                    "description": "Email of the user"
-                }, 
-                {
-                    "name" : "password",
-                    "in": "body",
-                    "required": true,
-                    "description": "Password of the user"
+        "/": {
+            "get": {
+                "x-swagger-router-controller": "home",
+                "operationId": "index",
+                "tags": ["Index"],
+                "description": "Home page",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Get all stories!"
+                    },
+                    "400": {
+                        "description": "Bad Login!"
+                    },
+                    "404": {
+                        "description": "Bad Request: 'message'!"
+                    }
                 }
-            ],
-            "responses": {}
-          }
+            }
         },
-        "/logout": {
+        "/login": {
             "get": {
-              "x-swagger-router-controller": "logout",
-              "operationId": "logout",
-              "tags": ["Auth"],
-              "description": "Log out",
-              "parameters": [],
-              "responses": {}
-            }
-        },
-        "/signup": {
-            "get": {
-              "x-swagger-router-controller": "signup",
-              "operationId": "signup",
-              "tags": ["Auth"],
-              "description": "Sign up page",
-              "parameters": [],
-              "responses": {}
-            }
-        },
-        "/signup ": {
-            "post": {
-              "x-swagger-router-controller": "signup",
-              "operationId": "signup",
-              "tags": ["Auth"],
-              "description": "Sign up in using email and password",
-              "parameters": [
-                  {   
-                      "name" : "email",
-                      "in": "body",
-                      "required": true,
-                      "description": "Email of the user"
-                  }, 
-                  {
-                      "name" : "password",
-                      "in": "body",
-                      "required": true,
-                      "description": "Password of the user"
-                  }, 
-                  {
-                      "name" : "confirmPassword",
-                      "in": "body",
-                      "required": true,
-                      "description": "Password of the user"
-                  }
-              ],
-              "responses": {}
-            }
-        },
-        "/account": {
-            "get": {
-              "x-swagger-router-controller": "account",
-              "operationId": "account",
-              "tags": ["Auth"],
-              "description": "Profile page",
-              "parameters": [],
-              "responses": {}
-            }
-        },
-        "/account/profile ": {
-            "post": {
-              "x-swagger-router-controller": "account",
-              "operationId": "account",
-              "tags": ["Auth"],
-              "description": "Update profile information",
-              "parameters": [
-                  {   
-                      "name" : "email",
-                      "in": "body",
-                      "required": true,
-                      "description": "Email of the user"
-                  }, 
-                  {
-                      "name" : "password",
-                      "in": "body",
-                      "required": true,
-                      "description": "Password of the user"
-                  }, 
-                  {
-                      "name" : "confirmPassword",
-                      "in": "body",
-                      "required": true,
-                      "description": "Password of the user"
-                  }
-              ],
-              "responses": {}
-            }
-        },
-        "/account/password": {
-            "post": {
-              "x-swagger-router-controller": "account",
-              "operationId": "account",
-              "tags": ["Auth"],
-              "description": "Update current password",
-              "parameters": [
-                  {
-                      "name" : "password",
-                      "in": "body",
-                      "required": true,
-                      "description": "Password of the user"
-                  }, 
-                  {
-                      "name" : "confirmPassword",
-                      "in": "body",
-                      "required": true,
-                      "description": "Password of the user"
-                  }
-              ],
-              "responses": {}
-            }
-        },
-        "/account/delete": {
-            "post": {
-              "x-swagger-router-controller": "account",
-              "operationId": "account",
-              "tags": ["Auth"],
-              "description": "Delete user account",
-              "parameters": [],
-              "responses": {}
-            }
-        },
-        "/reset/:token": {
-            "get": {
-              "x-swagger-router-controller": "account",
-              "operationId": "account",
-              "tags": ["Auth"],
-              "description": "Reset password page",
-              "parameters": [
-                {   
-                      "name" : "token",
-                      "in": "params",
-                      "required": true,
-                      "description": "Token for reset password"
+                "x-swagger-router-controller": "login",
+                "operationId": "login",
+                "tags": ["Auth"],
+                "description": "Login page",
+                "parameters": [],
+                "responses": {
+                        "200": {
+                            "description": "Login"
+                        },
+                        "403": {
+                            "description": "You are already logged in!"
+                        }
                 }
-              ],
-              "responses": {}
             }
         },
-        "/reset/:token ": {
+        "/login ": {
             "post": {
-              "x-swagger-router-controller": "account",
-              "operationId": "account",
-              "tags": ["Auth"],
-              "description": "Reset password page",
-              "parameters": [
-                {   
-                      "name" : "token",
-                      "in": "params",
-                      "required": true,
-                      "description": "Token for reset password"
-                },
-                {   
-                    "name" : "password",
-                    "in": "params",
-                    "required": true,
-                    "description": "New password"
-                },
-                {   
-                    "name" : "confirm",
-                    "in": "body",
-                    "required": true,
-                    "description": "New password"
+                "x-swagger-router-controller": "login",
+                "operationId": "login",
+                "tags": ["Auth"],
+                "description": "Sign in using email and password",
+                "parameters": [
+                    {   
+                        "name" : "email",
+                        "in": "body",
+                        "required": true,
+                        "description": "Email of the user"
+                    }, 
+                    {
+                        "name" : "password",
+                        "in": "body",
+                        "required": true,
+                        "description": "Password of the user"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succes! You are logged in!"
+                    },
+                    "400": {
+                        "description": "Error: missing parameters!"
+                    },
+                    "404": {
+                        "description": "Error: 'message'!"
+                    }
                 }
-              ],
-              "responses": {}
+            }
+            },
+            "/logout": {
+                "get": {
+                "x-swagger-router-controller": "logout",
+                "operationId": "logout",
+                "tags": ["Auth"],
+                "description": "Log out",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Success! You are logged out!"
+                    }
+                }
+                }
+            },
+            "/signup": {
+                "get": {
+                "x-swagger-router-controller": "signup",
+                "operationId": "signup",
+                "tags": ["Auth"],
+                "description": "Sign up page",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Create Account"
+                    },
+                    "403": {
+                        "description": "You are already logged in!"
+                    }
+                }
+                }
+            },
+            "/signup ": {
+                "post": {
+                "x-swagger-router-controller": "signup",
+                "operationId": "signup",
+                "tags": ["Auth"],
+                "description": "Sign up in using email and password",
+                "parameters": [
+                        {   
+                            "name" : "email",
+                            "in": "body",
+                            "required": true,
+                            "description": "Email of the user"
+                        }, 
+                        {
+                            "name" : "name",
+                            "in": "body",
+                            "required": true,
+                            "description": "Name of the user"
+                        }, 
+                        {
+                            "name" : "username",
+                            "in": "body",
+                            "required": true,
+                            "description": "Username of the user"
+                        }, 
+                        {
+                            "name" : "password",
+                            "in": "body",
+                            "required": true,
+                            "description": "Password of the user"
+                        }, 
+                        {
+                            "name" : "confirmPassword",
+                            "in": "body",
+                            "required": true,
+                            "description": "Password of the user"
+                        }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "User created!"
+                    },
+                    "400": {
+                        "description": "Error: missing parameters!"
+                    }
+                }
+                }
+            },
+            "/accounts": {
+                "get": {
+                "x-swagger-router-controller": "account",
+                "operationId": "account",
+                "tags": ["Auth"],
+                "description": "Profile page",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "My Account!"
+                    }
+                }
+                }
+            },
+            "/accounts/profile ": {
+                "post": {
+                "x-swagger-router-controller": "account",
+                "operationId": "account",
+                "tags": ["Auth"],
+                "description": "Update profile information",
+                "parameters": [
+                    {   
+                        "name" : "email",
+                        "in": "body",
+                        "required": true,
+                        "description": "Email of the user"
+                    }, 
+                    {
+                        "name" : "password",
+                        "in": "body",
+                        "required": true,
+                        "description": "Password of the user"
+                    }, 
+                    {
+                        "name" : "confirmPassword",
+                        "in": "body",
+                        "required": true,
+                        "description": "Password of the user"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Profile information has been updated!"
+                    },
+                    "400": {
+                        "description": "Error: 'message'!"
+                    }
+                }
+                }
+            },
+            "/accounts/password": {
+                "post": {
+                "x-swagger-router-controller": "account",
+                "operationId": "account",
+                "tags": ["Auth"],
+                "description": "Update current password",
+                "parameters": [
+                    {
+                        "name" : "password",
+                        "in": "body",
+                        "required": true,
+                        "description": "Password of the user"
+                    }, 
+                    {
+                        "name" : "confirmPassword",
+                        "in": "body",
+                        "required": true,
+                        "description": "Password of the user"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Password has been updated"
+                    },
+                    "400": {
+                        "description": "Error: missing parameters!"
+                    }
+                }
+                }
+            },
+            "/accounts ": {
+                "delete": {
+                "x-swagger-router-controller": "account",
+                "operationId": "account",
+                "tags": ["Auth"],
+                "description": "Delete user account",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Your account has been deleted!"
+                    },
+                    "400": {
+                        "description": "Error: 'message'!"
+                    }
+                }
+                }
+            },
+            "/reset/:token": {
+                "get": {
+                "x-swagger-router-controller": "account",
+                "operationId": "account",
+                "tags": ["Auth"],
+                "description": "Reset password page",
+                "parameters": [
+                    {   
+                        "name" : "token",
+                        "in": "params",
+                        "required": true,
+                        "description": "Token for reset password"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Password reset!"
+                    },
+                    "400": {
+                        "description": "Error: 'message'!"
+                    }
+                }
+                }
+            },
+            "/reset/:token ": {
+                "post": {
+                "x-swagger-router-controller": "account",
+                "operationId": "account",
+                "tags": ["Auth"],
+                "description": "Reset password page",
+                "parameters": [
+                    {   
+                        "name" : "token",
+                        "in": "params",
+                        "required": true,
+                        "description": "Token for reset password"
+                    },
+                    {   
+                        "name" : "password",
+                        "in": "params",
+                        "required": true,
+                        "description": "New password"
+                    },
+                    {   
+                        "name" : "confirm",
+                        "in": "body",
+                        "required": true,
+                        "description": "New password"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success! your password has been changed!"
+                    },
+                    "400": {
+                        "description": "Error: 'message'!"
+                    }
+                }
+            }
+        },
+        "/story/:id": {
+            "get": {
+                "x-swagger-router-controller": "story",
+                "operationId": "story",
+                "tags": ["Story"],
+                "description": "Get a story by id",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Get a story by id!"
+                    },
+                    "400": {
+                        "description": "Bad Login!"
+                    },
+                    "404": {
+                        "description": "Bad Request: 'message'!"
+                    }
+                }
+            }
+        },
+        "/story": {
+            "post": {
+                "x-swagger-router-controller": "story",
+                "operationId": "story",
+                "tags": ["Story"],
+                "description": "Create a story",
+                "parameters": [],
+                "responses": {
+                    "201": {
+                        "description": "Story created!"
+                    },
+                    "400": {
+                        "description": "Bad Login!"
+                    },
+                    "404": {
+                        "description": "Bad Request: 'message'!"
+                    }
+                }
+            }
+        },
+        "/story/:id ": {
+            "put": {
+                "x-swagger-router-controller": "story",
+                "operationId": "story",
+                "tags": ["Story"],
+                "description": "Edit a story by id",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Story edited!"
+                    },
+                    "400": {
+                        "description": "Bad Login!"
+                    },
+                    "404": {
+                        "description": "Bad Request: 'message'!"
+                    }
+                }
+            }
+        },
+        "/story/:id  ": {
+            "delete": {
+                "x-swagger-router-controller": "story",
+                "operationId": "story",
+                "tags": ["Story"],
+                "description": "Delete a story by id",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Story deleted!"
+                    },
+                    "400": {
+                        "description": "Bad Login!"
+                    },
+                    "404": {
+                        "description": "Bad Request: 'message'!"
+                    }
+                }
+            }
+        },
+        "/story/liked/:username": {
+            "get": {
+                "x-swagger-router-controller": "story",
+                "operationId": "story",
+                "tags": ["Story"],
+                "description": "All stories liked by a user",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Get all stories liked by a user"
+                    },
+                    "400": {
+                        "description": "Bad Login!"
+                    },
+                    "404": {
+                        "description": "Bad Request: 'message'!"
+                    }
+                }
+            }
+        },
+        "/story/:id/like/:username": {
+            "post": {
+                "x-swagger-router-controller": "story",
+                "operationId": "story",
+                "tags": ["Story"],
+                "description": "Like or Unlike a story",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Like or Unlike a story!"
+                    },
+                    "400": {
+                        "description": "Bad Login!"
+                    },
+                    "404": {
+                        "description": "Bad Request: 'message'!"
+                    }
+                }
+            }
+        },
+        "/profiles/:username": {
+            "get": {
+                "x-swagger-router-controller": "profile",
+                "operationId": "profile",
+                "tags": ["Profile"],
+                "description": "Get all stories & info of a user",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "400": {
+                        "description": "Bad Login!"
+                    },
+                    "404": {
+                        "description": "Bad Request: 'message'!"
+                    }
+                }
+            }
+        },
+        "/profiles/current/session": {
+            "get": {
+                "x-swagger-router-controller": "profile",
+                "operationId": "profile",
+                "tags": ["Profile"],
+                "description": "Get info of the current session",
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "400": {
+                        "description": "Bad Login!"
+                    },
+                    "404": {
+                        "description": "Bad Request: 'message'!"
+                    }
+                }
             }
         }
     }
