@@ -8,7 +8,7 @@ import {
 	FETCH_POSTS_SUCCESS,
 	FETCH_USER_POSTS,
 	FETCH_USER_POSTS_FAIL,
-	FETCH_USER_POSTS_SUCCESS,
+	FETCH_USER_POSTS_SUCCESS, FETCH_USERS, FETCH_USERS_FAIL, FETCH_USERS_SUCCESS,
 	LIKE_POST,
 	LIKE_POST_FAIL,
 	LIKE_POST_SUCCESS
@@ -19,6 +19,7 @@ import {API_URL} from "../../utils/env";
 export const fetchPosts = () => {
 	return async (dispatch) => {
 		dispatch({type: FETCH_POSTS});
+		dispatch({type: FETCH_USERS});
 		
 		const fetch_url = API_URL + "/";
 		const fetch_options = {credentials: "include"};
@@ -29,9 +30,11 @@ export const fetchPosts = () => {
 			if (!json.stories)
 				throw new Error('no stories');
 			dispatch({type: FETCH_POSTS_SUCCESS, payload: json.stories});
+			dispatch({type: FETCH_USERS_SUCCESS, payload: json.users});
 			return json;
 		} catch (err) {
 			dispatch({type: FETCH_POSTS_FAIL, err})
+			dispatch({type: FETCH_USERS_FAIL, err})
 		}
 	}
 };

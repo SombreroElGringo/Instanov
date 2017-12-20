@@ -36,7 +36,7 @@ export default class Camera extends React.Component {
 				<div/>
 				<div className="capture"
 				     onClick={() => this.captureImage()}/>
-				<div>
+				<div style={{display:"flex", alignItems:"center", fontSize: 40}}>
 					<i className={"fa fa-user"} onClick={() => this.switchFilter()}/>
 				</div>
 			</div>
@@ -158,8 +158,8 @@ export default class Camera extends React.Component {
 		const pos = this.ctracker && this.ctracker.getCurrentPosition();
 		if (typeof pos === "object") {
 			const [x, y] = pos[33];
-			const ratio = (face.height * 400) / face.width;
-			const width = 400;
+			const ratio = (face.height * 250) / face.width;
+			const width = 250;
 			const height = ratio;
 			context.drawImage(face, x - (width / 2), y - (height / 2), width, height);
 		}
