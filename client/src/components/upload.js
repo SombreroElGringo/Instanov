@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Link, Redirect} from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 import CircleSpinner from "./loaders/circle_spinner";
 import {API_URL} from "../utils/env";
 
