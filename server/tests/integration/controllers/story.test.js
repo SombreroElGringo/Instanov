@@ -22,6 +22,50 @@ describe('controllers/story.js', () => {
     });
 
 
+    describe('POST /story', () => {
+        it('should return 400 Bad Login', (done) => {
+            request(app)
+            .post('/story')
+            .expect(400, done);
+        });
+
+        it('should return 400', (done) => {
+            
+            const agent = request.agent(app);
+            
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'failed',
+            })
+            .end(() => {
+                agent.post('/story')
+                .attach('story', `${__dirname}/../../images/test.jpeg`)
+                .expect(400, done);
+            });
+        });
+
+        it('should return 201', (done) => {
+            
+            const agent = request.agent(app);
+            
+            agent.post('/login')
+            .send({
+                email: 'test.instanov@gmail.com',
+                password: 'success',
+            })
+            .end(() => {
+                agent.post('/story')
+                .field('username', 'test_instanov')
+                .field('hastag', '#japan #ryokan')
+                .field('desrcription', 'japan test')
+                .attach('story', `${__dirname}/../../images/test.jpeg`)
+                .expect(201, done);
+            });
+        });
+    });
+
+
     describe('GET /story/:id', () => {
         it('should return 400', (done) => {
             request(app)
@@ -154,50 +198,6 @@ describe('controllers/story.js', () => {
             .end(() => {  
                 agent.get(`/story/liked/test_instanov`)
                 .expect(200, done); 
-            });
-        });
-    });
-
-
-    describe('POST /story', () => {
-        it('should return 400 Bad Login', (done) => {
-            request(app)
-            .post('/story')
-            .expect(400, done);
-        });
-
-        it('should return 400', (done) => {
-            
-            const agent = request.agent(app);
-            
-            agent.post('/login')
-            .send({
-                email: 'test.instanov@gmail.com',
-                password: 'failed',
-            })
-            .end(() => {
-                agent.post('/story')
-                .attach('story', `${__dirname}/../../images/test.jpeg`)
-                .expect(400, done);
-            });
-        });
-
-        it('should return 201', (done) => {
-            
-            const agent = request.agent(app);
-            
-            agent.post('/login')
-            .send({
-                email: 'test.instanov@gmail.com',
-                password: 'success',
-            })
-            .end(() => {
-                agent.post('/story')
-                .field('username', 'test_instanov')
-                .field('hastag', '#japan #ryokan')
-                .field('desrcription', 'japan test')
-                .attach('story', `${__dirname}/../../images/test.jpeg`)
-                .expect(201, done);
             });
         });
     });

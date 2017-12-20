@@ -38,7 +38,7 @@ exports.createStory = (req, res, next) => {
 		.update(process.env.HASH_KEY)
 		.digest('hex')+'.'+req.files.story.mimetype.split('/')[1];
 		
-	let path = req.protocol + '://' + req.get('host') + '/story/embed/' + filename;
+	let path = req.protocol + '://localhost:5000/story/embed/' + filename;
 	
 	
 	let sampleFile = req.files.story;
@@ -187,12 +187,14 @@ exports.deleteStoryById = (req, res, next) => {
 	
 	Story.findOne({_id: new ObjectId(id)}).then(story => {
 			
-			fs.unlink(uploadsPath + story.info.filename, err => {
-				if (err) {
-					console.error('Error: ', err);
-				}
-				console.log(`Story deleted ${story.info.filename}`);
-			});
+			if (fs.existsSync(uploadsPath + story.info.filename)) {
+				fs.unlink(uploadsPath + story.info.filename, err => {
+					if (err) {
+						console.error('Error: ', err);
+					}
+					console.log(`Story deleted ${story.info.filename}`);
+				});
+			}
 			
 			Story.remove({_id: new ObjectId(id)}).then(err => {
 					res.json({
