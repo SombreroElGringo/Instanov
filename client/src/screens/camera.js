@@ -115,6 +115,7 @@ export default class Camera extends React.Component {
 				newHeight
 			);
 			this.thumbnail.src = this.canvas.toDataURL();
+			console.log(this.thumbnail.src);
 			ctx.transform(-1, 0, 0, 1, this.canvas.width, 0);
 			ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
 		}, 100)
