@@ -21,7 +21,7 @@ describe('controllers/story.js', () => {
         }).exec();
     });
 
-
+    /*
     describe('POST /story', () => {
         it('should return 400 Bad Login', (done) => {
             request(app)
@@ -431,5 +431,5 @@ describe('controllers/story.js', () => {
 
 
         Story.remove({username: 'test_instanov'}).exec();
-    });
+    });*/
 });
