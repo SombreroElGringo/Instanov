@@ -14,9 +14,6 @@ const logger = require('morgan');
 const lusca = require('lusca');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
-const multer = require('multer');
-
-multer({ dest: 'uploads/' });
 
 module.exports = function(app, passport) {
 
