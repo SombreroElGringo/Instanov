@@ -1,12 +1,9 @@
 /**
  * Module dependencies.
  */
-const path = require('path');
 const api = require('./helpers/apiAuth');
-const fileManager = require('./helpers/fileManager');
-const multer = require('multer');
+const fileupload = require('express-fileupload');
 
-const upload = multer({ storage: fileManager.getStorage() });
 
 /**
  * Controllers (route handlers).
@@ -56,7 +53,7 @@ module.exports = function(app, passport) {
      * Story routes
      */
     app.get('/story/:id', passport.isAuthenticated, storyController.getStoryById);
-    app.post('/story', upload.single('story'), passport.isAuthenticated, storyController.createStory);
+    app.post('/story', passport.isAuthenticated, fileupload() ,storyController.createStory);
     app.put('/story/:id', passport.isAuthenticated, storyController.editStoryById);
     app.delete('/story/:id', passport.isAuthenticated, storyController.deleteStoryById);
     app.get('/story/liked/:username', passport.isAuthenticated, storyController.storiesLikedByUser);

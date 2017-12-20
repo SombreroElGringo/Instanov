@@ -14,4 +14,5 @@ export default createStore(combineReducers({
 	auth,
 	posts,
 	currentpost,
-}), applyMiddleware(...middlewares))
+	
+}), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), applyMiddleware(...middlewares))

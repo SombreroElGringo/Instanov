@@ -39,14 +39,14 @@ class Routing extends React.Component{
 				       path={"/camera"}
 				       component={Camera}/>
 				<Route exact
+				       path={"/upload"}
+				       component={Upload}/>
+				<Route exact
 				       path={"/profiles/:username"}
 				       component={Profile}/>
 				<Route exact
 				       path={"/sign"}
 				       component={() => <Sign type={'signup'}/>}/>
-				<Route exact
-				       path={"/upload"}
-				       component={Upload}/>
 				<Route component={() => {
 					console.log(404);
 					return <HttpError error={{httpCode: "404"}}/>

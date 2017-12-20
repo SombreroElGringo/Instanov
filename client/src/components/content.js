@@ -32,7 +32,8 @@ class Content extends React.Component {
 					featured: post.info.path,
 					description: post.info.description,
 					date: moment(post.createdAt),
-					likes: post.likes
+					likes: post.likes,
+					hashtag: post.info.hashtag
 				};
 				return <Post post={newPost}
 				             key={post._id}/>

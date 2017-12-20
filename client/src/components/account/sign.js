@@ -52,9 +52,9 @@ class Sign extends Component {
         fetch(url, {
             method: 'POST',
             credentials: 'include',
-            headers: new Headers({
+            headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
-            }),
+            },
             body: body,
         }).then((res) => res.json()
         ).then((response) => {

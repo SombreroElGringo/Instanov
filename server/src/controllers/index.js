@@ -14,7 +14,7 @@ exports.index = (req, res, next) => {
 
    	Promise.all([
 		User.find({}, '_id profile.username'),
-		Story.find().sort('-date')
+		Story.find().sort({createdAt: -1})
 	])
 	.then(data => {
 		return res.json({ 

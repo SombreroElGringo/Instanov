@@ -39,8 +39,9 @@ export default class Camera extends React.Component {
 	}
 	
 	dismissThumbnail() {
-		this.thumbnail.style.opacity = 0;
-		setTimeout(() => this.thumbnail.style.display = "none", 400)
+		console.log(this.props.history.push("/upload", {file: this.thumbnail.src}))
+		//this.thumbnail.style.opacity = 0;
+		//setTimeout(() => this.thumbnail.style.display = "none", 400)
 	}
 	
 	setUpCanvas() {
@@ -114,8 +115,7 @@ export default class Camera extends React.Component {
 				newWidth,
 				newHeight
 			);
-			this.thumbnail.src = this.canvas.toDataURL();
-			console.log(this.thumbnail.src);
+			this.thumbnail.src = this.canvas.toDataURL('image/png');
 			ctx.transform(-1, 0, 0, 1, this.canvas.width, 0);
 			ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
 		}, 100)

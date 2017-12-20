@@ -33,6 +33,7 @@ class Post extends Component {
 			name,
 			image,
 			featured,
+			hashtag,
 			description,
 			date,
 			likes,
@@ -57,6 +58,7 @@ class Post extends Component {
 				</div>
 				<img src={featured}
 				     className={'post-featured'}
+				     onDoubleClick={() => this.like()}
 				     alt=""/>
 				<div className={'d-flex post-actions justify-content-between pt-1 pb-1'}>
 					<div className={'d-flex'}>
@@ -74,7 +76,8 @@ class Post extends Component {
 					{likes.length > 2 && <span> et <b>{likes.length - 2} autre{likes.length > 3 && 's'} personne{likes.length > 3 && 's'}</b></span>}
 				</div>}
 				{description && <div className={'p-1'}>
-					{description}
+					<p>{description}</p>
+					<p>{hashtag && hashtag.map(hash => <span key={hash} style={{color: "skyblue"}}>{hash} </span>)}</p>
 				</div>}
 				<div className={'p-1 post-date'}>
 					{moment(date).from(new Date())}
