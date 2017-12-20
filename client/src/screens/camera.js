@@ -6,7 +6,14 @@ require("./camera.css");
 export default class Camera extends React.Component {
 	state = {
 		stream: null,
-		showFace: false
+		showFace: false,
+		currentFilter: 0,
+		filters: [
+			"",
+			"/filters/glasses.png",
+			"/filters/putin.png",
+			"/filters/mask.png"
+		]
 	};
 	
 	render() {
@@ -18,12 +25,20 @@ export default class Camera extends React.Component {
 			</div>
 			<div className={"analysis-block"}
 			     ref={ref => this.spaceToCapture = ref}>
-				<video ref={ref => this.video = ref} width={window.innerWidth} height={window.innerHeight}/>
-				<canvas ref={ref => this.canvas = ref} width={window.innerWidth} height={window.innerHeight}/>
+				<video ref={ref => this.video = ref}
+				       width={window.innerWidth}
+				       height={window.innerHeight}/>
+				<canvas ref={ref => this.canvas = ref}
+				        width={window.innerWidth}
+				        height={window.innerHeight}/>
 			</div>
 			<div className="controls">
+				<div/>
 				<div className="capture"
 				     onClick={() => this.captureImage()}/>
+				<div>
+					<i className={"fa fa-user"} onClick={() => this.switchFilter()}/>
+				</div>
 			</div>
 			<img className={"thumbnail"}
 			     alt={"thumbnail's place"}
@@ -45,8 +60,6 @@ export default class Camera extends React.Component {
 	}
 	
 	setUpCanvas() {
-		const face = new Image();
-		face.src = "http://pluspng.com/img-png/glasses-png-glasses-png-image-2400.png";
 	
 	}
 	
@@ -64,20 +77,27 @@ export default class Camera extends React.Component {
 				
 				let videoInput = this.video;
 				let ctracker = new window.clm.tracker();
-				//let requestAnimFrame = window.requestAnimationFrame;
+				this.ctracker = ctracker;
+				let requestAnimFrame = window.requestAnimationFrame;
 				ctracker.init();
 				ctracker.start(videoInput);
 				
-				//let canvasInput = this.canvas;
-				//let cc = canvasInput.getContext('2d');
+				let canvasInput = this.canvas;
+				let cc = canvasInput.getContext('2d');
 				
-				/*function drawLoop() {
+				
+				const face = new Image();
+				const context = this.canvas.getContext("2d");
+				const drawLoop = () => {
 					requestAnimFrame(drawLoop);
 					cc.clearRect(0, 0, canvasInput.width, canvasInput.height);
-					ctracker.draw(canvasInput);
-				}*/
+					
+					this.drawFace(context, face)
+					
+					
+				}
 				
-				//drawLoop();
+				drawLoop();
 				
 			}, err => {
 				console.log(err)
@@ -97,12 +117,12 @@ export default class Camera extends React.Component {
 			let newWidth;
 			let toLeft = 0;
 			let toTop = 0;
-			if(this.canvas.width < this.canvas.height){
+			if (this.canvas.width < this.canvas.height) {
 				multiplicator = this.canvas.height / this.video.videoHeight;
 				newHeight = this.video.videoHeight * multiplicator;
 				newWidth = this.video.videoWidth * multiplicator;
 				toLeft = (-newWidth / 2) + (this.canvas.width / 2);
-			}else{
+			} else {
 				multiplicator = this.canvas.width / this.video.videoWidth;
 				newHeight = this.video.videoHeight * multiplicator;
 				newWidth = this.video.videoWidth * multiplicator;
@@ -115,9 +135,33 @@ export default class Camera extends React.Component {
 				newWidth,
 				newHeight
 			);
+			
+			const face = new Image();
+			this.drawFace(ctx, face);
+			
+			
 			this.thumbnail.src = this.canvas.toDataURL('image/png');
 			ctx.transform(-1, 0, 0, 1, this.canvas.width, 0);
-			ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
+			ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		}, 100)
+	}
+	
+	switchFilter() {
+		console.log(this.state)
+		this.setState({
+			currentFilter: (this.state.currentFilter+1) % this.state.filters.length,
+		})
+	}
+	
+	drawFace(context, face) {
+		face.src = this.state.filters[this.state.currentFilter];
+		const pos = this.ctracker && this.ctracker.getCurrentPosition();
+		if (typeof pos === "object") {
+			const [x, y] = pos[33];
+			const ratio = (face.height * 400) / face.width;
+			const width = 400;
+			const height = ratio;
+			context.drawImage(face, x - (width / 2), y - (height / 2), width, height);
+		}
 	}
 }

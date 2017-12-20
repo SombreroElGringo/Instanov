@@ -242,3 +242,4 @@ server/uploads/
 \.idea/
 .vscode
 package-lock.json
+/server/uploads/*
