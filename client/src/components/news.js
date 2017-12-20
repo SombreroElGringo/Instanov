@@ -1,8 +1,15 @@
 import React from "react";
 import {Bubble} from './'
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
+import getUsers from "../store/selectors/get_users";
+import {Link} from "react-router-dom";
 
-export default class News extends React.Component {
+class News extends React.Component {
 	render() {
+		const {users} = this.props;
+		console.log(users)
+		
 		return <div className={'bubble_container'}>
 			<div className={'p-1 d-flex justify-content-between'}>
 				<b>
@@ -16,23 +23,27 @@ export default class News extends React.Component {
 				</b>
 			</div>
 			<div className={'d-flex over-hidden'}>
-				{[
-					{name: 'Vous', image: 'https://unsplash.it/64?random'},
-					{name: 'Toto', image: 'https://unsplash.it/64?random'},
-					{name: 'Truc', image: 'https://unsplash.it/64?random'},
-					{name: 'Sexy_potato', image: 'https://unsplash.it/64?random'},
-					{name: 'Chips_co', image: 'https://unsplash.it/64?random'},
-					{name: 'InstaDraw', image: 'https://unsplash.it/64?random'},
-					{name: 'AbraPowa', image: 'https://unsplash.it/64?random'},
-				].map((value, index) => {
-					return <Bubble name={value.name}
-					               animation={'flipInY'}
-					               delay={index + 1}
-					               image={value.image + '&' + index}
-					               key={index}/>
+				{users && users.map((value, index) => {
+					if(!value.profile) return null;
+					value = value.profile ;
+					value.image = value.image || "https://unsplash.it/60/60?random&"+index;
+					return <Link to={`/profiles/${value.username}`}>
+						<Bubble name={value.username}
+						        animation={'flipInY'}
+						        delay={index + 1}
+						        image={value.image + '&' + index}
+						        key={index}/>
+					</Link>
 				})}
 			
 			</div>
 		</div>
 	}
 }
+
+const mapStateToProps = (state) => ({
+	users: getUsers(state),
+});
+const mapDispatchToProps = (dispatch) => bindActionCreators({},dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(News);
