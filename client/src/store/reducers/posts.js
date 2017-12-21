@@ -1,5 +1,5 @@
 import {Map} from 'immutable'
-import {FETCH_LIKES_FROM_USER_SUCCESS, FETCH_POSTS_SUCCESS, FETCH_USER_POSTS_SUCCESS, FETCH_USERS_SUCCESS, LIKE_POST} from "../actions/consts";
+import {FETCH_LIKES_FROM_USER_SUCCESS, FETCH_POSTS_SUCCESS, FETCH_USER_POSTS, FETCH_USER_POSTS_SUCCESS, FETCH_USERS_SUCCESS, LIKE_POST} from "../actions/consts";
 
 const initialState = Map({
 	posts: undefined,
@@ -11,6 +11,7 @@ const initialState = Map({
 const handlers = {
 	[FETCH_POSTS_SUCCESS]: (state, action) => state.set('posts', action.payload),
 	[FETCH_USERS_SUCCESS]: (state, action) => state.set('users', action.payload),
+	[FETCH_USER_POSTS]: (state, action) => state.set('user_posts', []),
 	[FETCH_USER_POSTS_SUCCESS]: (state, action) => state.set('user_posts', action.payload),
 	[LIKE_POST]: (state, action) => state.update("posts", (posts) => {
 		const {id, username} = action.payload;
